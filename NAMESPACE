@@ -1,0 +1,1 @@
+export(sin.d, cos.d, tan.d, asin.d, acos.d, atan.d, as.radians, ellipse3, calc.sdd, calc.sde, calc.mcp, makeshapes, distances)
