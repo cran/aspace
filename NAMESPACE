@@ -1,1 +1,1 @@
-export(sin.d, cos.d, tan.d, asin.d, acos.d, atan.d, as.radians, ellipse3, calc.sdd, calc.sde, calc.mcp, makeshapes, distances)
+export(sin_d, cos_d, tan_d, asin_d, acos_d, atan_d, as_radians, ellipse3, calc_sdd, calc_sde, calc_mcp, makeshapes, distances)

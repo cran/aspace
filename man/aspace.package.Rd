@@ -8,8 +8,8 @@
 \tabular{ll}{
 Package: \tab aspace\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2006-05-26\cr
+Version: \tab 1.2\cr
+Date: \tab 2007-05-08\cr
 License: \tab GPL (>= 2.0)\cr
 }
 }

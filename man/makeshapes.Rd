@@ -18,11 +18,11 @@
   the database via the unique identifier.
 }
 \seealso{
-  \code{\link{calc.sdd}}, \code{\link{calc.sde}}, 
-  \code{\link{calc.mcp}} 
+  \code{\link{calc_sdd}}, \code{\link{calc_sde}}, 
+  \code{\link{calc_mcp}} 
 }
 \examples{
-  calc.sdd(weights=NULL)
+  calc_sdd(weights=NULL)
   makeshapes(asciiname="SDD_Output.txt", headerskip=0, outname="Test", verbose=TRUE)
 }
 \keyword{manip}

@@ -24,11 +24,11 @@
 \author{Tarmo K. Remmel}
 \note{This function is an an adjustment by Brad Biggerstaff (CDC) and Tarmo K. Remmel of the function circle() written by John Wallace (University of Washington) and obtained from the S-News listserv.}
 \seealso{ 
-  \code{\link{calc.sde}}, \code{\link{as.radians}}
+  \code{\link{calc_sde}}, \code{\link{as_radians}}
 }
 \examples{
   plot.new()
   plot(10,10, type="n")
-  ellipse3(cx = 10, cy = 8, rx = 2, ry = 1, theta = as.radians(45), yaxis = TRUE, pointsonly = FALSE, fill = FALSE, col=6)
+  ellipse3(cx = 10, cy = 8, rx = 2, ry = 1, theta = as_radians(45), yaxis = TRUE, pointsonly = FALSE, fill = FALSE, col=6)
 }
 \keyword{graphs}
