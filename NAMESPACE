@@ -1,1 +1,1 @@
-export(sin_d, cos_d, tan_d, asin_d, acos_d, atan_d, as_radians, ellipse3, calc_sdd, calc_sde, calc_mcp, makeshapes, distances)
+export(sin_d, cos_d, tan_d, asin_d, acos_d, atan_d, as_radians, ellipse3, calc_sdd, calc_sde, calc_mcp, calc_box, plot_sdd, plot_sde, plot_mcp, plot_box, makeshapes, distances)

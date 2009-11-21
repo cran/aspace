@@ -21,7 +21,7 @@
   \item{x}{A numeric vector of x-coordinates}
   \item{y}{A numeric vector of y-coordinates}
 }
-\author{Tarmo K. Remmel}
+\author{Tarmo K. Remmel, Randy Bui}
 \note{This function is an an adjustment by Brad Biggerstaff (CDC) and Tarmo K. Remmel of the function circle() written by John Wallace (University of Washington) and obtained from the S-News listserv.}
 \seealso{ 
   \code{\link{calc_sde}}, \code{\link{as_radians}}

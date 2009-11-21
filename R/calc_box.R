@@ -1,24 +1,24 @@
-"calc_sdd" <-
-function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE) {
+"calc_box" <-
+function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE) {
 
   #=======================================================
   #
-  #  TITLE:     STANDARD DEVIATION DISTANCE (SDD) CALCULATOR
-  #  FUNCTION:  calc_sdd()
+  #  TITLE:     STANDARD DEVIATION BOX CALCULATOR
+  #  FUNCTION:  calc_box()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
   #  DATE:      November 21, 2009
-  #  CALLS:     distances(), ellipse3(), as_radians(), mcp(), gridpts()
-  #  NEEDS:     LIBRARIES: adehabitat, splancs
+  #  CALLS:     distances(), mcp(), gridpts()
+  #  NEEDS:     LIBRARIES: adehabitat, splancs, Hmisc
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
-  #             THE SDD CIRCLE; THIS VALUE IS ADDED TO THE OUTPUT filename
+  #             THE SD BOX; THIS VALUE IS ADDED TO THE OUTPUT filename
   #             AS AN IDENTIFIER THAT CAN BE USED TO EXTRACT RECORDS WHEN 
-  #             MULTIPLE SDD CIRCLES ARE ADDED TO THE SAME FILE - KEEP IT UNIQUE!
+  #             MULTIPLE SD BOXES ARE ADDED TO THE SAME FILE - KEEP IT UNIQUE!
   #             THE filename PARAMETER CONTROLS WHERE THE COORDINATE INFORMATION 
-  #             IS WRITTEN TO.  USE YOUR FILE TO CREATE SHAPEFILES AFTERWARDS.
+  #             IS WRITTEN TO.  USE THE FILE YOU CREATE TO DEVELOP SHAPEFILES AFTERWARDS.
   #
   #  ERROR:     1000  NO ERRORS DETECTED
   #               25  TOO FEW ACTIVITIES, NEED >= 3
-  #               21  INVALID COMBINATION: calccentre=TRUE and centre.xy!=NULL
+  #               21  INVALID COMBINATION: calcentre=TRUE and centre.xy!=NULL
   #
   #  OUTPUT:	
   #     ID  		UNIQUE SDD IDENTIFIER
@@ -32,21 +32,27 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #		median.y	Y-COORDINATE OF MEDIAN CENTRE
   #		CMD.x	    X-COORDINATE OF CENTRE OF MINIMUM DISTANCE
   #		CMD.y	    Y-COORDINATE OF CENTRE OF MINIMUM DISTANCE
-  #		SDD.radius	RADIUS OF SDD
-  #		SDD.area	AREA OF SDD
+  #		SD.x		ORTHOGONAL STD. DEV IN X-DIRECTION
+  #		SD.y		ORTHOGONAL STD. DEV IN Y-DIRECTION
+  #		Box.area	AREA OF ORTHOGONAL STD. DEV BOX IN COORDINATE UNITS
+  #     NW.coord	NORTH-WEST CORNER OF SD BOX IN COORDINATE UNITS
+  #     NE.coord	NORTH-EAST CORNER OF SD BOX IN COORDINATE UNITS
+  #     SW.coord	SOUTH-WEST CORNER OF SD BOX IN COORDINATE UNITS
+  #     SE.coord	SOUTH-EAST CORNER OF SD BOX IN COORDINATE UNITS
   #
   #=======================================================
 
   # SET DEPENDENCIES
   require(adehabitat)
   require(splancs)
+  require(Hmisc)
   
   # INITIALIZE ERROR CODE TO NO ERROR
   errorcode <- 1000
 
-  # STORE THE COUNT OF POINTS
+  # STORE THE COUNT OF POINTS/CASES IN THE SOURCE DATASET
   n <- dim(points)[1]
-  
+
   if(calccentre) {
     if(length(centre.xy) == 2) {
 	  # ERROR: INVALID COMBINATION: calccentre=TRUE AND centre.xy!=NULL
@@ -62,14 +68,14 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
 		wt.x <- points[,1] * weights 
 		wt.y <- points[,2] * weights
 		
-		# COMPUTE AND USE WEIGHTED MEAN CENTRE RATHER THAN USE SPECIFIED LOCATION AS CENTRE (WEIGHTED)
+		# COMPUTE AND USE WEIGHTED MEAN CENTRE RATHER THAN USER SPECIFIED LOCATION AS CENTRE (WEIGHTED)
         WMC.x <- c( sum(wt.x) / sum(weights) )
         WMC.y <- c( sum(wt.y) / sum(weights) )    
         centre.xy[1] <- WMC.x
         centre.xy[2] <- WMC.y
        }
 	  else {
-        # COMPUTE AND USE MEAN CENTRE RATHER THAN USE SPECIFIED LOCATION AS CENTRE (NON-WEIGHTED)
+        # COMPUTE AND USE MEAN CENTRE RATHER THAN USER SPECIFIED LOCATION AS CENTRE (NON-WEIGHTED)
         meanx <- sum(points[,1])/n
         meany <- sum(points[,2])/n
         centre.xy[1] <- meanx
@@ -133,47 +139,59 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   x.CMD <- first.row.CMD[2]
   y.CMD <- first.row.CMD[3]
 
-  CMD <- c(x.CMD,y.CMD)		   
+  CMD <- c(x.CMD,y.CMD)		      
   
   # INITIALIZE FUNCTION VARIABLE WITH PARAMETER VALUE
   dist <- distances(centre.xy, points)
   
   # TEST WHETHER A SUFFICIENT NUMBER OF POINTS WERE SUPPLIED
   if(length(dist) >= 3) {
-	
-	if(weighted) {		
-	#PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
-	SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
-	}
-	else {
-	# PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (UNWEIGHTED SDD)
-	SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
-	}
-	
-    # COMPUTE SDD AREA
-    sddarea <- pi * SDD^2
-  
-    # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDD CIRCLE      
-    coordsSDD <- ellipse3(centre.xy[1], centre.xy[2], SDD, SDD, as_radians(0), col=6, pointsonly=TRUE)
-	
-    coordsSDD <- cbind(1, coordsSDD$x, coordsSDD$y)
+
+	  if(weighted) {		
+	  #PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
+	  SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
+	  
+	  # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
+	  SDx <- sqrt(wtd.var(points[,1], weights))
+	  SDy <- sqrt(wtd.var(points[,2], weights))
+	  }
+	  else {
+	  # PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (SDD)
+	  SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
+	  
+	  # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
+	  SDx <- sd(points[,1])
+	  SDy <- sd(points[,2])
+	  }
+
+	  # COMPUTE THE AREA OF THE SD BOX
+	  areabox <- SDx * SDy  	
+	 
+	  # STORE THE COORDINATES OF EACH CORNER OF THE SD BOX IN SEPARATE OBJECTS   
+	  
+	  NW <- c((centre.xy[1] - (SDx)), (centre.xy[2] + (SDy)))
+	  NE <- c((centre.xy[1] + (SDx)), (centre.xy[2] + (SDy)))
+	  SW <- c((centre.xy[1] - (SDx)), (centre.xy[2] - (SDy)))
+	  SE <- c((centre.xy[1] + (SDx)), (centre.xy[2] - (SDy)))
+	  box.points <- rbind(NW, NE, SE, SW)
+	  coordsBOX <- cbind(1, box.points[,1], box.points[,2])
     
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
-    outtabSDD <- cbind(id, coordsSDD)
-
-    write.table(outtabSDD, sep=",", append=TRUE, file=filename, col.names=FALSE)
-
-	# STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
-	r.SDD <- list(id = id, points = points, SDD = SDD, calccentre = calccentre, weighted = weighted, weights = weights, 
-	              CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], central.x = CF[1], central.y = CF[2],
-				  median.x = median.x, median.y = median.y, CMD.x = CMD[1], CMD.y = CMD[2], SDD.area = sddarea) 
-	assign("r.SDD", r.SDD, pos=1)
-    
-    # PROVIDE THE SDD VALUE AS A RETURN PARAMETER TO THE CALLING FUNCTION
-    result.sdd <- list("id"=id, "calccentre"=calccentre, "weighted"=weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2], 
-	                   "central.x"=CF[1], "central.y"=CF[2], "median.x"=median.x, "median.y"=median.y, "CMD.x"=CMD[1], "CMD.y"=CMD[2], 
-					   "SDD.radius"=SDD, "SDD.area"=sddarea)
-	return(result.sdd)  
+    outtabBOX <- cbind(id, coordsBOX)
+    write.table(outtabBOX, sep=",", append=TRUE, file=filename, col.names=FALSE)
+	
+    # STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
+	r.BOX <- list(id = id, points = points, calccentre = calccentre, weighted = weighted, weights = weights, CENTRE.x = centre.xy[1], 
+	              CENTRE.y = centre.xy[2], central.x = CF[1], central.y = CF[2], median.x = median.x, median.y = median.y, CMD.x = CMD[1], CMD.y = CMD[2], 
+				  SDD = SDD, SDx = SDx, SDy = SDy, Box.area = areabox, NW.coord = NW, NE.coord = NE, SW.coord = SW, SE.coord = SE)
+	assign("r.BOX", r.BOX, pos=1)
+	
+    # PROVIDE THE BOX AREA AND ITS EXTENT AS A RETURN PARAMETER TO THE CALLING FUNCTION
+    result.box <- list("id"=id, "calccentre"=calccentre, "weighted" = weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2],
+					   "central.x"=CF[1], "central.y"=CF[2], "median.x"=median.x, "median.y"=median.y, "CMD.x"=CMD[1], 
+					   "CMD.y"=CMD[2], "SD.x"=SDx, "SD.y"=SDy, "Box.area"=areabox, "NW.coord"=NW, "NE.coord"=NE, "SW.coord"=SW, "SE.coord"=SE)   
+    return(result.box)
+	
   }
   else {
     # ERROR: TOO FEW POINTS: NEED >= 3
@@ -185,5 +203,5 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
     }
     return("ERROR")
   }
+ 
 }
-

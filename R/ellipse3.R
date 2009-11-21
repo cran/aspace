@@ -5,8 +5,7 @@ function(cx, cy, rx, ry, theta = 0, yaxis = TRUE, pointsonly = FALSE, fill = FAL
   #
   #  TITLE:     ELLIPSE DRAWING TOOL
   #  FUNCTION:  ellipse3()
-  #  AUTHOR:    JOHN WALLACE, BRAD BIGGERSTAFF (MODIFIED: TARMO K. REMMEL) 
-  #  DATE:      27 MARCH 2006
+  #  AUTHOR:    JOHN WALLACE, BRAD BIGGERSTAFF (MODIFIED: TARMO K. REMMEL & RANDY BUI)
   #  CALLS:     NA
   #  NEEDS:     
   #  NOTES:    FUNCTION TO PLOT AN ELLIPSE WITH CENTER (cx,cy)
@@ -47,8 +46,8 @@ function(cx, cy, rx, ry, theta = 0, yaxis = TRUE, pointsonly = FALSE, fill = FAL
   #=======================================================
 
   z <- (0:360 * pi)/180
-  pin <- par()$pin
-  usr <- par()$usr
+  pin <- c(5.749582, 5.139166)
+  usr <- c(0, 1, 0, 1)
   adj <- (pin[2]/pin[1])/((usr[4] - usr[3])/(usr[2] - usr[1]))
   if(yaxis) {
     x <- sin(z) * rx * adj
