@@ -2,7 +2,13 @@
 \alias{plot_sde}
 \title{Plot the Standard Deviation Ellipse}
 \description{This function plots the SDE as an ellipse centred on the mean/weighted/user-defined centre of a set of point observations. The plot characterizes the dispersion of point observations along two orthogonal axes.}
-\usage{plot_sde(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", sde.col='black', sde.lwd=2, jpeg=FALSE, ...)}
+\usage{plot_sde(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, 
+weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, 
+points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', 
+centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, 
+plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, 
+CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", 
+yaxis="Northing (m)", sde.col='black', sde.lwd=2, jpeg=FALSE, ...)}
 \arguments{
   \item{plotnew}{Boolean: Set to TRUE to create a new plot. Set to FALSE to overlay current plot.}
   \item{plotSDEaxes}{Boolean: Set to TRUE if the orthogonal axes through the centroid are to be plotted}
@@ -39,5 +45,8 @@
   \code{\link{plot_box}}, \code{\link{makeshapes}},
   \code{\link{ellipse3}},  
 }
-\examples{plot_sde(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, plotmedian=TRUE, plotCMD=TRUE, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)")}
+\examples{plot_sde(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, 
+plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, 
+plotmedian=TRUE, plotCMD=TRUE, titletxt="Title", 
+xaxis="Easting (m)", yaxis="Northing (m)")}
 \keyword{arith}

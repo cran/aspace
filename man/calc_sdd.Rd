@@ -2,7 +2,8 @@
 \alias{calc_sdd}
 \title{Calculate the Standard Distance Deviation (Standard Distance)}
 \description{This function computes the Standard Distance Deviation (SDD) or Standard Distance from a set of points.}
-\usage{calc_sdd(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
+\usage{calc_sdd(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
 \arguments{
   \item{id}{A unique integer to identify a SDD estimate}
   \item{filename}{A string indicating the ASCII textfile where shape coordinates will be written}
@@ -39,5 +40,6 @@
   \code{\link{ellipse3}}, \code{\link{makeshapes}},
   \code{\link[adehabitat]{mcp}}, \code{\link[splancs]{gridpts}}  
 }
-\examples{calc_sdd(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=TRUE, weights=wts, CMD.npts=10000, points=activities, verbose=TRUE)}
+\examples{calc_sdd(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=TRUE, weights=wts, CMD.npts=10000, points=activities, verbose=TRUE)}
 \keyword{arith}

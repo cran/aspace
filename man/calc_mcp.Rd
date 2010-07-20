@@ -2,7 +2,8 @@
 \alias{calc_mcp}
 \title{Computing the Minimum Convex Polygon (MCP)}
 \description{This function computes the Minimum Convex Polygon (MCP) from a set of points. The MCP is the minimum area polygon containing a set of point locations.}
-\usage{calc_mcp(id=1, points = activities, filename="MCP_Output.txt", verbose = FALSE, pct = 100)}
+\usage{calc_mcp(id=1, points = activities, filename="MCP_Output.txt", 
+verbose = FALSE, pct = 100)}
 \arguments{
   \item{id}{Provide a unique integer to identify an MCP from others that you may construct with other data points}
   \item{points}{Two-column matrix or data frame of point coordinates}
@@ -28,5 +29,6 @@
   \code{\link{calc_box}},
   \code{\link{makeshapes}}
 } 
-\examples{calc_mcp(id=1, points = activities, filename="MCP_Output.txt", verbose = FALSE, pct = 100)}
+\examples{calc_mcp(id=1, points = activities, filename="MCP_Output.txt", 
+verbose = FALSE, pct = 100)}
 \keyword{arith}

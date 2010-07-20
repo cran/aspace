@@ -2,7 +2,8 @@
 \alias{calc_sde}
 \title{Calculating the Standard Deviation Ellipse}
 \description{This function computes the Standard Deviation Ellipse (SDE) from a set of points. The SDE is a centrographic measure used to characterize the dispersion of point observations along two orthogonal axes. The SDE also captures directional bias in a spatial point pattern, the ellipse will be oriented in the direction of maximum dispersion.}
-\usage{calc_sde(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
+\usage{calc_sde(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
 \arguments{
   \item{id}{A unique integer to identify the shape}
   \item{filename}{A string indicating the ASCII textfile where shape coordinates will be written}
@@ -52,5 +53,6 @@
   \code{\link{makeshapes}}, \code{\link[adehabitat]{mcp}},
   \code{\link[splancs]{gridpts}}, \code{\link{ellipse3}}
 }
-\examples{calc_sde(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=TRUE)}
+\examples{calc_sde(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=TRUE)}
 \keyword{arith}

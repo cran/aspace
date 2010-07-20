@@ -6,7 +6,7 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #  TITLE:     STANDARD DEVIATION BOX CALCULATOR
   #  FUNCTION:  calc_box()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      November 21, 2009
+  #  DATE:      July 20, 2010
   #  CALLS:     distances(), mcp(), gridpts()
   #  NEEDS:     LIBRARIES: adehabitat, splancs, Hmisc
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
@@ -165,7 +165,7 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
 	  }
 
 	  # COMPUTE THE AREA OF THE SD BOX
-	  areabox <- SDx * SDy  	
+	  areabox <- (2*SDx) * (2*SDy)  	
 	 
 	  # STORE THE COORDINATES OF EACH CORNER OF THE SD BOX IN SEPARATE OBJECTS   
 	  

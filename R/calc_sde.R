@@ -6,7 +6,7 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #  TITLE:     STANDARD DEVIATION ELLIPSE (SDE) CALCULATOR
   #  FUNCTION:  calc_sde()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO REMMEL
-  #  DATE:      November 21, 2009
+  #  DATE:      July 20, 2010
   #  CALLS:     ellipse3(), atan_d(), sin_d(), cos_d(), atan_d(), mcp(), gridpts()
   #  NEEDS:     LIBRARIES: adehabitat, splancs
   #  NOTES:     NOTE THAT R TRIGONOMETRIC FUNCTIONS ARE IN RADIANS NOT DEGREES.
@@ -182,11 +182,21 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   # ADD COLUMN NAMES TO points
   names(points) <- c("x", "y", "x2", "y2", "x'", "y'", "x'2", "y'2", "x'y'")
 
+  if(weighted) {
+  # COMPUTE WEIGHTED THETA (as in EBDON, 1985)
+  top1 <- sum(weights*points[,7]) - sum(weights*points[,8])
+  top2 <- sqrt( (sum(weights*points[,7])-sum(weights*points[,8]))^2 + 4*(sum(weights*points[,9]))^2 )
+  bottom <- (2 * sum(weights*points[,9]))
+  tantheta <- (top1 + top2 ) / bottom
+  }
+  else {
   # COMPUTE THETA (as in EBDON, 1985)
   top1 <- sum(points[,7]) - sum(points[,8])
   top2 <- sqrt( (sum(points[,7])-sum(points[,8]))^2 + 4*(sum(points[,9]))^2 )
   bottom <- (2 * sum(points[,9]))
   tantheta <- (top1 + top2 ) / bottom
+  }  
+  
   # IF tantheta IS NEGATIVE, IGNORE THE NEGATIVE SIGN BUT SUBTRACT THETA FROM 90
   # TO OBTAIN THE PROPER CLOCKWISE ROTATION ANGLE FROM THE TRANSPOSED AXES
   if(tantheta < 0) {

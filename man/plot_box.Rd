@@ -2,7 +2,13 @@
 \alias{plot_box}
 \title{Plot the Standard Distance Box}
 \description{This function plots the standard deviation of x- and y-coordinates as a box, with the edges set, respectively, to the standard deviation of the x- and y-coordinates.}
-\usage{plot_box(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", box.col='black', box.lwd=2, jpeg=FALSE, ...)}
+\usage{plot_box(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, 
+weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, 
+points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', 
+centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, 
+plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, 
+CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", 
+yaxis="Northing (m)", box.col='black', box.lwd=2, jpeg=FALSE, ...)}
 \arguments{
   \item{plotnew}{Boolean: Set to TRUE to create a new plot. Set to FALSE to overlay current plot.}
   \item{plothv}{Boolean: Set to TRUE if the orthogonal N-S, E-W axes are to be plotted through the centre}
@@ -39,5 +45,7 @@
   \code{\link{plot_sde}}, \code{\link{makeshapes}},
   \code{\link{ellipse3}},  
 }
-\examples{plot_box(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, plotmedian=TRUE, plotCMD=TRUE, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)")}
+\examples{plot_box(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, 
+plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, plotmedian=TRUE, 
+plotCMD=TRUE, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)")}
 \keyword{arith}

@@ -2,7 +2,13 @@
 \alias{plot_sdd}
 \title{Plot the Standard Distance Deviation (Standard Distance)}
 \description{This function plots the SDD as a circle with radius (standard distance), centred on a mean/weighted-mean/user-defined centre of a set of point observations.}
-\usage{plot_sdd(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", sdd.col='black', sdd.lwd=2, jpeg=FALSE, ...)}
+\usage{plot_sdd(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, 
+weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, 
+points.col='black', points.pch=1, plotcentre=TRUE, centre.col='black', 
+centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, 
+plotmedian=FALSE, median.col='blue', median.pch=17, plotCMD=FALSE, 
+CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", 
+yaxis="Northing (m)", sdd.col='black', sdd.lwd=2, jpeg=FALSE, ...)}
 \arguments{
   \item{plotnew}{Boolean: Set to TRUE to create a new plot. Set to FALSE to overlay current plot.}
   \item{plothv}{Boolean: Set to TRUE if the orthogonal N-S, E-W axes are to be plotted through the centre}
@@ -39,5 +45,8 @@
   \code{\link{plot_box}}, \code{\link{makeshapes}},
   \code{\link{ellipse3}},  
 }
-\examples{plot_sdd(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, plotmedian=TRUE, plotCMD=TRUE, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)")}
+\examples{plot_sdd(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, 
+plotpoints=TRUE, plotcentre=TRUE, plotcentral=TRUE, 
+plotmedian=TRUE, plotCMD=TRUE, titletxt="Title", 
+xaxis="Easting (m)", yaxis="Northing (m)")}
 \keyword{arith}

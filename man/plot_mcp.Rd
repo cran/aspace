@@ -2,7 +2,10 @@
 \alias{plot_mcp}
 \title{Plot the Minimum Convex Polygon}
 \description{This function plots the MCP as a polygon, which covers the geographical extent of a set of points on a Cartesian plane.}
-\usage{plot_mcp(plotnew=TRUE, plotpoints=TRUE, points.col='black', points.pch=1, titletxt="Title", xaxis= "Easting (m)", yaxis="Northing (m)", mcp.col='black', mcp.lwd=2, fill.col=NA, jpeg=FALSE, ...)}
+\usage{plot_mcp(plotnew=TRUE, plotpoints=TRUE, points.col='black', 
+points.pch=1, titletxt="Title", xaxis= "Easting (m)", 
+yaxis="Northing (m)", mcp.col='black', mcp.lwd=2, 
+fill.col=NA, jpeg=FALSE, ...)}
 \arguments{
   \item{plotnew}{Boolean: Set to TRUE to create a new plot. Set to FALSE to overlay current plot.}
   \item{plotpoints}{Boolean: Set to TRUE if the point observations are to be plotted}
@@ -24,5 +27,6 @@
   \code{\link{plot_sde}}, \code{\link{makeshapes}},
   \code{\link{ellipse3}},  
 }
-\examples{plot_mcp(plotnew=TRUE, plotpoints=TRUE, titletxt="Title", xaxis= "Easting (m)", yaxis="Northing (m)")}
+\examples{plot_mcp(plotnew=TRUE, plotpoints=TRUE, titletxt="Title", 
+xaxis= "Easting (m)", yaxis="Northing (m)")}
 \keyword{arith}

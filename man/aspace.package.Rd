@@ -2,14 +2,14 @@
 \alias{aspace-package}
 \alias{aspace}
 \docType{package}
-\title{A collection of functions for estimating centrographic statistics and computational geometries from spatial point patterns}
-\description{A collection of functions for computing centrographic statistics (e.g., standard distance, standard deviation ellipse), and minimum convex polygons (MCP) from point data.  A tool is also provided for converting geometric objects associated with the centrographic statistics, and MCPs into ESRI Shapefiles. This library was initially conceived to aid in the analysis of spatial patterns of travel behaviour (see Buliung and Remmel, 2008). Major changes in the current version include the separation of plotting and estimation capabilities, and the addition of other centrographic measures (e.g., standard deviation box, centre of minimum distance, central feature).}
+\title{A collection of functions for estimating centrographic statistics and computational geometries for spatial point patterns}
+\description{A collection of functions for computing centrographic statistics (e.g., standard distance, standard deviation ellipse), and minimum convex polygons (MCP) for spatial point observations.  A tool is also provided for converting geometric objects associated with the centrographic statistics, and MCPs into ESRI Shapefiles. This library was initially conceived to aid in the analysis of spatial patterns of travel behaviour (see Buliung and Remmel, 2008). Major changes in the current version include the separation of plotting and estimation capabilities, and the addition of other centrographic measures (e.g., standard deviation box, centre of minimum distance, central feature).}
 \details{
 \tabular{ll}{
 Package: \tab aspace\cr
 Type: \tab Package\cr
-Version: \tab 2.2\cr
-Date: \tab 21-11-2009\cr
+Version: \tab 2.3\cr
+Date: \tab 20-07-2010\cr
 License: \tab GPL (>= 2.0)\cr
 }
 }

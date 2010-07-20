@@ -2,7 +2,8 @@
 \alias{calc_box}
 \title{Calculate the Standard Deviation Box}
 \description{The orthogonal dispersion of a set of points can be described using the standard deviation of the x- and y-coordinates of a set of point observations. The orthogonal dispersion can then be visualized with a Standard Deviation Box. This function computes the properties of the Standard Deviation Box (SD Box) from a set of point observations.}
-\usage{calc_box(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
+\usage{calc_box(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
 \arguments{
   \item{id}{A unique integer to identify a SD Box}
   \item{filename}{A string indicating the ASCII textfile where the box coordinates will be written}
@@ -44,5 +45,6 @@
   \code{\link{ellipse3}}, \code{\link{makeshapes}}, 
   \code{\link[adehabitat]{mcp}}, \code{\link[splancs]{gridpts}}, \code{\link[Hmisc]{wtd.var}} 
 }
-\examples{calc_box(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=TRUE)}
+\examples{calc_box(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, 
+weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=TRUE)}
 \keyword{arith}
