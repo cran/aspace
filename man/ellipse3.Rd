@@ -2,7 +2,8 @@
 \alias{ellipse3}
 \title{Ellipse drawing tool}
 \description{A convenient tool for plotting circles or ellipses with the functionality of rotation about an angle theta (in radians).  The function can also be used to capture coordinates of the perimeter of the shape for further usage outside the function.}
-\usage{ellipse3(cx, cy, rx, ry, theta = 0, yaxis = TRUE, pointsonly = FALSE, fill = FALSE, ...)}
+\usage{ellipse3(cx, cy, rx, ry, theta = 0, yaxis = TRUE, 
+pointsonly = FALSE, fill = FALSE, ...)}
 \arguments{
   \item{cx}{x-coordinate of ellipse center}
   \item{cy}{y-coordinate of ellipse center}
@@ -29,6 +30,7 @@
 \examples{
   plot.new()
   plot(10,10, type="n")
-  ellipse3(cx = 10, cy = 8, rx = 2, ry = 1, theta = as_radians(45), yaxis = TRUE, pointsonly = FALSE, fill = FALSE, col=6)
+  ellipse3(cx = 10, cy = 8, rx = 2, ry = 1, theta = as_radians(45), 
+  yaxis = TRUE, pointsonly = FALSE, fill = FALSE, col=6)
 }
 \keyword{graphs}

@@ -2,7 +2,8 @@
 \alias{makeshapes}
 \title{Builder of ESRI Shapefiles}
 \description{This function is a basic ESRI Shapefile builder.  The SDD, SDE, and MCP functions included in this library produce ASCII output files that represent the input required for this function. However, any similarly formatted file will also work.  This function provides capabilities for converting the centrographic and geometric summary measures of geographical extent and dispersion into GIS databases for further cartographic rendering and analysis.}
-\usage{makeshapes(asciiname = "SDD_Output.txt", headerskip = 0, outname = "Test", verbose = TRUE)}
+\usage{makeshapes(asciiname = "SDD_Output.txt", headerskip = 0, 
+outname = "Test", verbose = TRUE)}
 \arguments{
   \item{asciiname}{The name of the ASCII file containing coordinate info. input to the shape building procedure}
   \item{headerskip}{An integer to indicate how many lines of the ASCII file to skip at the top if a header has been added}

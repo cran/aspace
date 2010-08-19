@@ -11,7 +11,7 @@ weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE)}
   \item{calccentre}{Boolean: Set to TRUE if the mean center is to be calculated}
   \item{weighted}{Boolean: Set to TRUE if the weighted mean center is to be computed with weighted coordinates}
   \item{weights}{Weights applied to point observations, number of weights should equal the number of observations}
-  \item{CMD.npts}{The approximate number of points to generate for the centre of minimum distance (CMD) calculation}
+  \item{CMD.npts}{The approximate number of grid points within the convex hull for the centre of minimum distance (CMD) calculation}
   \item{points}{A 2-column matrix or data frame containing the set of point observations input to the calc_sdd function}
   \item{verbose}{Boolean: Set to TRUE if extensive feedback is desired on the standard output}
 }
