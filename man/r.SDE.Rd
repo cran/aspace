@@ -9,6 +9,7 @@
   \describe{
 	\item{id}{Identifier for the SDE estimate - it should be unique}
 	\item{points}{a simple two-column data frame (or matrix) containing x,y coordinates for a series of point locations.}
+	\item{coordsSDE}{coordsSDE value, coordinates of the SDE}	
 	\item{calccentre}{Boolean: TRUE if mean centre is computed}
 	\item{CENTRE.x}{X-coordinate of the centre}
 	\item{CENTRE.y}{Y-coordinate of the centre}
@@ -28,12 +29,6 @@
 	\item{ThetaCorr}{Corrected theta angle for rotation of major axis from north}
 	\item{weighted}{Boolean: TRUE if the weighted mean centre is to be used instead}
     \item{weights}{Weights applied to point observations}
-	\item{central.x}{X-coordinate of central feature}
-	\item{central.y}{Y-coordinate of central feature}
-	\item{median.x}{X-coordinate of median centre}
-	\item{median.y}{Y-coordinate of median centre}
-	\item{CMD.x}{X-coordinate of centre of minimum distance}
-	\item{CMD.y}{Y-coordinate of centre of minimum distance}
   }
 }
 \details{The coordinates of the points must have the same units and projection as the specified center.}

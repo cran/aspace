@@ -14,12 +14,6 @@
     \item{weights}{Weights applied to point observations}
     \item{CENTRE.x}{Actual, used x-coordinate of centre}
     \item{CENTRE.y}{Actual, used y-coordinate of centre}
-	\item{central.x}{X-coordinate of central feature}
-	\item{central.y}{Y-coordinate of central feature}
-	\item{median.x}{X-coordinate of median centre}
-	\item{median.y}{Y-coordinate of median centre}
-	\item{CMD.x}{X-coordinate of centre of minimum distance}
-	\item{CMD.y}{Y-coordinate of centre of minimum distance}
     \item{SDD}{Standard deviation distance value}
     \item{SDx}{Orthogonal standard deviation in x-direction}
     \item{SDy}{Orthogonal standard deviation in y-direction}

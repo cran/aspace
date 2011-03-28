@@ -11,7 +11,8 @@ weighted=FALSE, weights=NULL, points=activities)}
   \item{weights}{Weights applied to point observations, number of weights should equal the number of observations}
   \item{points}{A 2-column matrix or data frame containing the set of point observations}
 }
-\details{This function is most powerful when used repetitively within a loop to compute multiple mean centres from different datasets.}
+\details{Use the meanloc (coordinates) and meanatt(attributes) to produce shapefiles using the convert.to.shapefile 
+and write.shapefile from the shapefiles library}
 \value{
   The result is a list of terms:
   \item{id}{Identifier for the mean centre - it should be unique}
@@ -21,11 +22,18 @@ weighted=FALSE, weights=NULL, points=activities)}
   \item{CENTRE.y}{Y-coordinate of the mean centre}
   }
 \author{Randy Bui, Ron Buliung}
-\note{Results are stored in the r.mean object and can be passed through plotting functions.}
+\note{Results are stored in the r.mean object and can be passed through plotting functions. This function can also be used repetitively within a loop to compute multiple mean centres from different datasets.}
 \seealso{
   \code{\link{median_centre}}, \code{\link{CMD}},
   \code{\link{CF}}
 }
-\examples{mean_centre(id=1, filename="mean_centre_Output.txt", 
-weighted=FALSE, weights=NULL, points=activities)}
+\examples{
+## Mean centre example
+mean_centre(id=1, filename="mean_centre_Output.txt", 
+weighted=FALSE, weights=NULL, points=activities)
+
+## Mean centre to shapefile example (exclude the comments below to run script)
+## shp <- convert.to.shapefile(meanloc,meanatt,"id",5)
+## write.shapefile(shp, "Mean_Shape", arcgis=T)
+}
 \keyword{arith}

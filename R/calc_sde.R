@@ -1,22 +1,24 @@
 "calc_sde" <-
-function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE) {
+function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=activities, verbose=FALSE) {
 
   #=======================================================
   #
   #  TITLE:     STANDARD DEVIATION ELLIPSE (SDE) CALCULATOR
   #  FUNCTION:  calc_sde()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO REMMEL
-  #  DATE:      July 20, 2010
-  #  CALLS:     ellipse3(), atan_d(), sin_d(), cos_d(), atan_d(), mcp(), gridpts()
-  #  NEEDS:     LIBRARIES: adehabitat, splancs
+  #  DATE:      March 28, 2011
+  #  CALLS:     atan_d(), sin_d(), cos_d(), atan_d()
   #  NOTES:     NOTE THAT R TRIGONOMETRIC FUNCTIONS ARE IN RADIANS NOT DEGREES.
   #             WMC:  WEIGHTED MEAN CENTRE
   #				USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE SDE; THIS VALUE IS ADDED TO THE OUTPUT filename
   #             AS AN IDENTIFIER THAT CAN BE USED TO EXTRACT RECORDS WHEN 
-  #             MULTIPLE SDEs ARE ADDED TO THE SAME FILE - KEEP IT UNIQUE!
+  #             A USER EMBEDDS THE FUNCTION IN A LOOP TO GENERATE
+  #             MULTIPLE SDEs TO THE SAME FILE.
   #             THE filename PARAMETER CONTROLS WHERE THE COORDINATE INFORMATION 
-  #             IS WRITTEN TO.  USE YOUR FILE TO CREATE SHAPEFILES AFTERWARDS.
+  #             IS WRITTEN TO. USE sdeloc (coordinates) and sdeatt (attributes) 
+  #             TO PRODUCE SHAPEFILES USING THE CONVERT.TO.SHAPEFILE AND WRITE.SHAPEFILE 
+  #             FUNCTIONS FROM THE SHAPEFILES LIBRARY.
   #
   #  ERROR:     1000  NO ERRORS DETECTED
   #               60  TOO MANY COLUMNS IN DESTINATION MATRIX
@@ -43,18 +45,9 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #		Sin2Theta		   TRIGONOMETRIC RESULT
   #		Cos2Theta		   TRIGONOMETRIC RESULT
   #		ThetaCorr		   CLOCKWISE ROTATION ANGLE FROM NORTH TO MAJOR AXIS
-  #		central.x	       X-COORDINATE OF CENTRAL FEATURE
-  #		central.y	       Y-COORDINATE OF CENTRAL FEATURE
-  #		median.x	       X-COORDINATE OF MEDIAN CENTRE
-  #		median.y	       Y-COORDINATE OF MEDIAN CENTRE
-  #		CMD.x	           X-COORDINATE OF CENTRE OF MINIMUM DISTANCE
-  #		CMD.y	           Y-COORDINATE OF CENTRE OF MINIMUM DISTANCE			   
-  #
+  #		sdeatt			   ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
+  #		sdeloc			   UNIQUE ID AND X,Y COORDINATES OF VERTICES FOR POST-PROCESSING INTO SDE SHAPEFILE
   #=======================================================
-
-  # SET DEPENDENCIES
-  require(adehabitat)
-  require(splancs)  
   
   # INITIALIZE ERROR CODE TO NO ERROR
   errorcode <- 1000
@@ -108,67 +101,10 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
         meany <- sum(points[,2])/n
         centre.xy[1] <- meanx
         centre.xy[2] <- meany
-      } 
-    }
+	  } 
+	}
   }
 }
-
-  # COMPUTE THE MEDIAN CENTRE
-  median.x <- median(points[,1])
-  median.y <- median(points[,2])	
-  
-  # DETERMINE THE CENTRAL FEATURE
-  count.CF <- length(points[,1])	
-  M.CF <- matrix(0,nrow=count.CF,ncol=3)				
-
-  	for(i in 1:count.CF) {
-		row.CF <- points[i,]
-		coord.CF <- c(row.CF[,1],row.CF[,2])
-
-		dist.CF <- distances(centre.xy=coord.CF, points, verbose=FALSE)
-		sum.dist.CF <- sum(dist.CF)
-					
-		M.CF[i,1] <- sum.dist.CF
-		M.CF[i,2] <- coord.CF[1]
-		M.CF[i,3] <- coord.CF[2]
-	}
-
-  order.CF <- M.CF[order(M.CF[,1]),]
-  first.row.CF <- order.CF[1,]
-	
-  x.CF <- first.row.CF[2]
-  y.CF <- first.row.CF[3]
-
-  CF <- c(x.CF,y.CF)			     
-
-  # COMPUTE THE CENTRE OF MINIMUM DISTANCE
-  temp <- as.data.frame(cbind(1,points))
-  temp[,1] <- as.factor(temp[,1])
-  MCP <- (mcp(temp[,2:3], temp[,1], percent=100))
-  MCP.extract <- cbind(X=MCP[,2],Y=MCP[,3])
-  grid <- gridpts(MCP.extract,CMD.npts)	
-
-  count.CMD <- length(grid[,1])	
-  M.CMD <- matrix(0,nrow=count.CMD,ncol=3)				
-
-  	for(i in 1:count.CMD) {
-		coord.CMD <- grid[i,]
-
-		dist.CMD <- distances(centre.xy=coord.CMD, points, verbose=FALSE)
-		sum.dist.CMD <- sum(dist.CMD)
-					
-		M.CMD[i,1] <- sum.dist.CMD
-		M.CMD[i,2] <- coord.CMD[1]
-		M.CMD[i,3] <- coord.CMD[2]
-	}
-
-  order.CMD <- M.CMD[order(M.CMD[,1]),]
-  first.row.CMD <- order.CMD[1,]
-	
-  x.CMD <- first.row.CMD[2]
-  y.CMD <- first.row.CMD[3]
-
-  CMD <- c(x.CMD,y.CMD)		   
   
   # ADD COLUMNS TO points FOR SQUARED x,y TERMS
   points <- cbind(points, points[,1]^2, points[,2]^2)
@@ -248,8 +184,20 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   # STORE THE ECCENTRICITY OF THE SDE
   eccentricity <- sqrt(1 - ((min(sigmax,sigmay)^2)/(max(sigmax,sigmay)^2)))
 
-  coordsSDE <- ellipse3(centre.xy[1], centre.xy[2], sigmax, sigmay, as_radians(theta), pointsonly=TRUE)
-  coordsSDE <- cbind(1, coordsSDE$x, coordsSDE$y)    
+  
+  # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDE ELLIPSE (BASED ON ELLIPSEPOINTS FUNCTION FROM SFSMISC LIBRARY) 
+    B <- min(sigmax, sigmay)
+    A <- max(sigmax, sigmay)
+    d2 <- (A - B) * (A + B)
+    phi <- 2 * pi * seq(0, 1, len = 360)
+    sp <- sin(phi)
+    cp <- cos(phi)
+    r <- sigmax * sigmay/sqrt(B^2 + d2 * sp^2)
+	xy <- r * cbind(cp, sp)
+    al <- (90-theta) * pi/180
+    ca <- cos(al)
+    sa <- sin(al)
+    coordsSDE <- xy %*% rbind(c(ca, sa), c(-sa, ca)) + cbind(rep(centre.xy[1], 360), rep(centre.xy[2], 360))  
       
   if(verbose) {
     cat("\n----------------------------------------------")
@@ -282,26 +230,30 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   }
 
   # STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
-  r.SDE <- list(id = id, points = points, calccentre = calccentre, CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], 
+  r.SDE <- list(id = id, points = points, coordsSDE = coordsSDE, calccentre = calccentre, CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], 
                 Major = Major, Minor = Minor, theta = theta, Sigma.x = sigmax, Sigma.y = sigmay, Eccentricity = eccentricity, 
 				Area.sde = areaSDE, TanTheta = tantheta, SinTheta = sintheta, CosTheta = costheta, SinThetaCosTheta = sinthetacostheta, 
-				Sin2Theta = sin2theta, Cos2Theta = cos2theta, ThetaCorr = Theta.Corr, weighted = weighted, weights = weights, central.x = CF[1], 
-				central.y = CF[2], median.x = median.x, median.y = median.y, CMD.x = CMD[1], CMD.y = CMD[2])
+				Sin2Theta = sin2theta, Cos2Theta = cos2theta, ThetaCorr = Theta.Corr, weighted = weighted, weights = weights)
   assign("r.SDE", r.SDE, pos=1)
 	
-  sde.result <- list("id"=id, "CALCCENTRE"=calccentre, "weighted"=weighted,
+  # STORE SDE ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
+  result.sde <- list("id"=id, "CALCCENTRE"=calccentre, "weighted"=weighted,
                      "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2], "Sigma.x"=sigmax, "Sigma.y"=sigmay,
                      "Major"=Major, "Minor"=Minor, "Theta"=theta, "Eccentricity"=eccentricity, "Area.sde"=areaSDE, 
                      "TanTheta"=tantheta, "SinTheta"=sintheta, "CosTheta"=costheta, "SinThetaCosTheta"=sinthetacostheta,
-                     "Sin2Theta"=sin2theta, "Cos2Theta"=cos2theta, "ThetaCorr"=Theta.Corr, "central.x"=CF[1], "central.y"=CF[2], 
-				     "median.x"=median.x, "median.y"=median.y, "CMD.x" = CMD[1], "CMD.y" = CMD[2])
+                     "Sin2Theta"=sin2theta, "Cos2Theta"=cos2theta, "ThetaCorr"=Theta.Corr)
+  print(result.sde)
+  result.sde<-as.data.frame(result.sde)
+
+  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
+  assign("sdeatt", result.sde, pos=1)	
 
   # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
-  outtabSDE <- cbind(id, coordsSDE)
-  write.table(outtabSDE, sep=",", append=TRUE, file=filename, col.names=FALSE)
+  sdeloc <- as.data.frame(cbind(id, coordsSDE))
+  colnames(sdeloc)=c("id","x","y")
+  write.table(sdeloc, sep=",", file=filename, col.names=FALSE)
   
-  # PROVIDE SDE RESULTS LIST OBJECT TO CALLING FUNCTION
-  return(sde.result)
-  
+  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
+  assign("sdeloc", sdeloc, pos=1)	
 }
 

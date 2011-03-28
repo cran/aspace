@@ -1,20 +1,22 @@
 "calc_sdd" <-
-function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, CMD.npts=10000, points=activities, verbose=FALSE) {
+function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=activities, verbose=FALSE) {
 
   #=======================================================
   #
   #  TITLE:     STANDARD DEVIATION DISTANCE (SDD) CALCULATOR
   #  FUNCTION:  calc_sdd()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      November 21, 2009
-  #  CALLS:     distances(), ellipse3(), as_radians(), mcp(), gridpts()
-  #  NEEDS:     LIBRARIES: adehabitat, splancs
+  #  DATE:      March 28, 2011
+  #  CALLS:     distances(), as_radians()
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE SDD CIRCLE; THIS VALUE IS ADDED TO THE OUTPUT filename
   #             AS AN IDENTIFIER THAT CAN BE USED TO EXTRACT RECORDS WHEN 
-  #             MULTIPLE SDD CIRCLES ARE ADDED TO THE SAME FILE - KEEP IT UNIQUE!
+  #             A USER EMBEDDS THE FUNCTION IN A LOOP TO GENERATE
+  #             MULTIPLE SDD CIRCLES TO THE SAME FILE.
   #             THE filename PARAMETER CONTROLS WHERE THE COORDINATE INFORMATION 
-  #             IS WRITTEN TO.  USE YOUR FILE TO CREATE SHAPEFILES AFTERWARDS.
+  #             IS WRITTEN TO. USE sddloc (coordinates) and sddatt (attributes) 
+  #             TO PRODUCE SHAPEFILES USING THE CONVERT.TO.SHAPEFILE AND WRITE.SHAPEFILE 
+  #             FUNCTIONS FROM THE SHAPEFILES LIBRARY.
   #
   #  ERROR:     1000  NO ERRORS DETECTED
   #               25  TOO FEW ACTIVITIES, NEED >= 3
@@ -26,20 +28,11 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #		weighted    T|F SHOULD THE CENTRE BE WEIGHTED (WEIGHTED MEAN CENTER)
   #		CENTRE.x	X-COORDINATE OF THE CENTRE
   #		CENTRE.y	Y-COORDINATE OF THE CENTRE
-  #		central.x	X-COORDINATE OF CENTRAL FEATURE
-  #		central.y	Y-COORDINATE OF CENTRAL FEATURE
-  #		median.x	X-COORDINATE OF MEDIAN CENTRE
-  #		median.y	Y-COORDINATE OF MEDIAN CENTRE
-  #		CMD.x	    X-COORDINATE OF CENTRE OF MINIMUM DISTANCE
-  #		CMD.y	    Y-COORDINATE OF CENTRE OF MINIMUM DISTANCE
   #		SDD.radius	RADIUS OF SDD
   #		SDD.area	AREA OF SDD
-  #
+  #		sddatt		ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
+  #		sddloc		UNIQUE ID AND X,Y COORDINATES OF VERTICES FOR POST-PROCESSING INTO SDD SHAPEFILE
   #=======================================================
-
-  # SET DEPENDENCIES
-  require(adehabitat)
-  require(splancs)
   
   # INITIALIZE ERROR CODE TO NO ERROR
   errorcode <- 1000
@@ -78,63 +71,6 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
     }
   }
   
-  # COMPUTE THE MEDIAN CENTRE
-  median.x <- median(points[,1])
-  median.y <- median(points[,2])	
-  
-  # DETERMINE THE CENTRAL FEATURE
-  count.CF <- length(points[,1])	
-  M.CF <- matrix(0,nrow=count.CF,ncol=3)				
-
-  	for(i in 1:count.CF) {
-		row.CF <- points[i,]
-		coord.CF <- c(row.CF[,1],row.CF[,2])
-
-		dist.CF <- distances(centre.xy=coord.CF, points, verbose=FALSE)
-		sum.dist.CF <- sum(dist.CF)
-					
-		M.CF[i,1] <- sum.dist.CF
-		M.CF[i,2] <- coord.CF[1]
-		M.CF[i,3] <- coord.CF[2]
-	}
-
-  order.CF <- M.CF[order(M.CF[,1]),]
-  first.row.CF <- order.CF[1,]
-	
-  x.CF <- first.row.CF[2]
-  y.CF <- first.row.CF[3]
-
-  CF <- c(x.CF,y.CF)			     
-
-  # COMPUTE THE CENTRE OF MINIMUM DISTANCE
-  temp <- as.data.frame(cbind(1,points))
-  temp[,1] <- as.factor(temp[,1])
-  MCP <- (mcp(temp[,2:3], temp[,1], percent=100))
-  MCP.extract <- cbind(X=MCP[,2],Y=MCP[,3])
-  grid <- gridpts(MCP.extract,CMD.npts)	
-
-  count.CMD <- length(grid[,1])	
-  M.CMD <- matrix(0,nrow=count.CMD,ncol=3)				
-
-  	for(i in 1:count.CMD) {
-		coord.CMD <- grid[i,]
-
-		dist.CMD <- distances(centre.xy=coord.CMD, points, verbose=FALSE)
-		sum.dist.CMD <- sum(dist.CMD)
-					
-		M.CMD[i,1] <- sum.dist.CMD
-		M.CMD[i,2] <- coord.CMD[1]
-		M.CMD[i,3] <- coord.CMD[2]
-	}
-
-  order.CMD <- M.CMD[order(M.CMD[,1]),]
-  first.row.CMD <- order.CMD[1,]
-	
-  x.CMD <- first.row.CMD[2]
-  y.CMD <- first.row.CMD[3]
-
-  CMD <- c(x.CMD,y.CMD)		   
-  
   # INITIALIZE FUNCTION VARIABLE WITH PARAMETER VALUE
   dist <- distances(centre.xy, points)
   
@@ -153,27 +89,41 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
     # COMPUTE SDD AREA
     sddarea <- pi * SDD^2
   
-    # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDD CIRCLE      
-    coordsSDD <- ellipse3(centre.xy[1], centre.xy[2], SDD, SDD, as_radians(0), col=6, pointsonly=TRUE)
-	
-    coordsSDD <- cbind(1, coordsSDD$x, coordsSDD$y)
+    # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDD CIRCLE (BASED ON ELLIPSEPOINTS FUNCTION FROM SFSMISC LIBRARY)      
+    B <- min(SDD, SDD)
+    A <- max(SDD, SDD)
+    d2 <- (A - B) * (A + B)
+    phi <- 2 * pi * seq(0, 1, len = 360)
+    sp <- sin(phi)
+    cp <- cos(phi)
+    r <- SDD * SDD/sqrt(B^2 + d2 * sp^2)
+	xy <- r * cbind(cp, sp)
+    al <- 0 * pi/180
+    ca <- cos(al)
+    sa <- sin(al)
+    coordsSDD <- xy %*% rbind(c(ca, sa), c(-sa, ca)) + cbind(rep(centre.xy[1], 360), rep(centre.xy[2], 360))
     
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
-    outtabSDD <- cbind(id, coordsSDD)
-
-    write.table(outtabSDD, sep=",", append=TRUE, file=filename, col.names=FALSE)
+	sddloc <- as.data.frame(cbind(id, coordsSDD))
+	colnames(sddloc)=c("id","x","y")
+    write.table(sddloc, sep=",", file=filename, col.names=FALSE)
+	
+	# DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
+	assign("sddloc", sddloc, pos=1)	
 
 	# STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
-	r.SDD <- list(id = id, points = points, SDD = SDD, calccentre = calccentre, weighted = weighted, weights = weights, 
-	              CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], central.x = CF[1], central.y = CF[2],
-				  median.x = median.x, median.y = median.y, CMD.x = CMD[1], CMD.y = CMD[2], SDD.area = sddarea) 
+	r.SDD <- list(id = id, points = points, coordsSDD = coordsSDD, SDD = SDD, calccentre = calccentre, weighted = weighted, weights = weights, 
+	                   CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], SDD.area = sddarea) 
 	assign("r.SDD", r.SDD, pos=1)
     
-    # PROVIDE THE SDD VALUE AS A RETURN PARAMETER TO THE CALLING FUNCTION
-    result.sdd <- list("id"=id, "calccentre"=calccentre, "weighted"=weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2], 
-	                   "central.x"=CF[1], "central.y"=CF[2], "median.x"=median.x, "median.y"=median.y, "CMD.x"=CMD[1], "CMD.y"=CMD[2], 
+    # STORE SDD ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
+    result.sdd <- list("id"=id, "calccentre"=calccentre, "weighted"=weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2],
 					   "SDD.radius"=SDD, "SDD.area"=sddarea)
-	return(result.sdd)  
+	print(result.sdd)
+	result.sdd<-as.data.frame(result.sdd)
+
+	# DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
+	assign("sddatt", result.sdd, pos=1)	
   }
   else {
     # ERROR: TOO FEW POINTS: NEED >= 3

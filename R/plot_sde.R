@@ -1,7 +1,6 @@
 "plot_sde" <-
 function(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, points.col='black', 
-         points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, plotmedian=FALSE, 
-		 median.col='blue', median.pch=17, plotCMD=FALSE, CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", 
+         points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", 
 		 sde.col='black', sde.lwd=2, jpeg=FALSE, ...) {
 		 
   #=======================================================
@@ -9,8 +8,8 @@ function(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, weightedpts.col
   #  TITLE:     STANDARD DEVIATION ELLIPSE (SDE) PLOT FUNCTION
   #  FUNCTION:  plot_sde()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      November 21, 2009
-  #  CALLS:     ellipse3(), jpeg()
+  #  DATE:      March 28, 2011
+  #  CALLS:     jpeg()
   #  NOTES:     THE r.SDE OBJECT IS REQUIRED (GENERATED FROM THE CALC_SDE FUNCTION)
   #             TO PLOT THE SDE. THE PAR(...) OPTION ALLOWS 
   #             FOR ADDITIONAL GRAPHICAL PARAMETERS.
@@ -36,7 +35,7 @@ function(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, weightedpts.col
 	  plot(1, type="n", asp=1, xlab=xaxis, ylab=yaxis, xlim=c(min.x, max.x), ylim=c(min.y, max.y))
 	  }
 	  
-	  ellipse3(r.SDE$CENTRE.x, r.SDE$CENTRE.y, r.SDE$Sigma.x, r.SDE$Sigma.y, as_radians(r.SDE$theta), col=sde.col, lwd=sde.lwd)
+	  lines(r.SDE$coordsSDE, col=sde.col, lwd=sde.lwd)
 	  title(paste(titletxt, sep=""))
 	  
 	  if(plotSDEaxes) {    
@@ -65,22 +64,7 @@ function(plotnew=TRUE, plotSDEaxes=FALSE, plotweightedpts=FALSE, weightedpts.col
 		# ADD THE CENTRE POINT (NON-WEIGHTED/WEIGHTED/USER-DEFINED)
 		points(r.SDE$CENTRE.x, r.SDE$CENTRE.y, col=centre.col, pch=centre.pch)
 	  }
-	  
-	  if(plotcentral) {
-		# IDENTIFY THE CENTRAL FEATURE
-		points(r.SDE$central.x, r.SDE$central.y, col=central.col, pch=central.pch)
-	  }
 
-	  if(plotmedian) {
-		# ADD MEDIAN CENTRE POINT
-		points(r.SDE$median.x, r.SDE$median.y, col=median.col, pch=median.pch)
-	  }
-	  
-	  if(plotCMD) {
-		# ADD THE CENTRE OF MINIMUM DISTANCE POINT
-		points(r.SDE$CMD.x, r.SDE$CMD.y, col=CMD.col, pch=CMD.pch)
-	  }
-	 
 	  if(jpeg) {
 		# TURN OFF JPEG DEVICE WHEN DONE
 		dev.off()

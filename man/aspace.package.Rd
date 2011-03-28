@@ -3,13 +3,13 @@
 \alias{aspace}
 \docType{package}
 \title{A collection of functions for estimating centrographic statistics and computational geometries for spatial point patterns}
-\description{A collection of functions for computing centrographic statistics (e.g., standard distance, standard deviation ellipse), and minimum convex polygons (MCP) for spatial point observations.  A tool is also provided for converting geometric objects associated with the centrographic statistics, and MCPs into ESRI Shapefiles. This library was initially conceived to aid in the analysis of spatial patterns of travel behaviour (see Buliung and Remmel, 2008). Major changes in the current version include the separation of plotting and estimation capabilities, and the addition of other centrographic measures (e.g., standard deviation box, centre of minimum distance, central feature).}
+\description{A collection of functions for computing centrographic statistics (e.g., standard distance, standard deviation ellipse, standard deviation box) for observations taken at point locations. Separate plotting functions have been developed for each measure. Users interested in writing results to ESRI shapefiles can do so by using results from aspace functions as inputs to the convert.to.shapefile and write.shapefile functions in the shapefiles library. The aspace library was originally conceived to aid in the analysis of spatial patterns of travel behaviour (see Buliung and Remmel, 2008). Major changes in the current version include (1) removal of dependencies on several external libraries (e.g., gpclib, maptools, sp), (2) the separation of plotting and estimation capabilities, (3) reduction in the number of functions, and (4) expansion of analytical capabilities with additional functions for descriptive analysis and visualization (e.g., standard deviation box, centre of minimum distance, central feature).}
 \details{
 \tabular{ll}{
 Package: \tab aspace\cr
 Type: \tab Package\cr
-Version: \tab 2.5\cr
-Date: \tab 2010-08-20\cr
+Version: \tab 3.0\cr
+Date: \tab 2011-03-28\cr
 License: \tab GPL (>= 2.0)\cr
 }
 }
@@ -30,8 +30,5 @@ License: \tab GPL (>= 2.0)\cr
   Levine, N. 2002. CrimeStat II: A Spatial Statistics Program for the Analysis 
   of Crime Incident Locations (version 2.0) Houston TX/National Institute of Justice, 
   Washington DC: Ned Levine & Associates.
-  \cr\cr
-  Mohr, C.O. 1947. Table of equivalent populations of North American mammals. 
-  American Midland Naturalist, 37: 223-249.
 }
 \keyword{arith}

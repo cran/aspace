@@ -6,13 +6,16 @@ function(id=1, filename="mean_centre_Output.txt", weighted=FALSE, weights=NULL, 
   #  TITLE:     MEAN CENTRE CALCULATOR
   #  FUNCTION:  mean_centre()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      August 19, 2010
+  #  DATE:      March 28, 2011
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE MEAN CENTRE; THIS VALUE IS ADDED TO THE OUTPUT filename
   #             AS AN IDENTIFIER THAT CAN BE USED TO EXTRACT RECORDS WHEN 
-  #             MULTIPLE MEAN CENTRES ARE ADDED TO THE SAME FILE - KEEP IT UNIQUE!
+  #             A USER EMBEDDS THE FUNCTION IN A LOOP TO GENERATE
+  #             MULTIPLE MEAN CENTRES TO THE SAME FILE.
   #             THE filename PARAMETER CONTROLS WHERE THE COORDINATE INFORMATION 
-  #             IS WRITTEN TO.  USE YOUR FILE TO CREATE SHAPEFILES AFTERWARDS.
+  #             IS WRITTEN TO. USE meanloc (coordinates) and meanatt (attributes) 
+  #             TO PRODUCE SHAPEFILES USING THE CONVERT.TO.SHAPEFILE AND WRITE.SHAPEFILE 
+  #             FUNCTIONS FROM THE SHAPEFILES LIBRARY.
   #
   #  OUTPUT:	
   #     ID  		UNIQUE MEAN CENTRE IDENTIFIER
@@ -20,6 +23,8 @@ function(id=1, filename="mean_centre_Output.txt", weighted=FALSE, weights=NULL, 
   #		weights		WEIGHTS (IF APPLIED)
   #		CENTRE.x	X-COORDINATE OF THE CENTRE
   #		CENTRE.y	Y-COORDINATE OF THE CENTRE
+  #		meanatt		ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
+  #		meanloc		UNIQUE ID AND X,Y COORDINATES OF THE POINT FOR POST-PROCESSING AS SHAPEFILE
   #
   #=======================================================
 
@@ -49,20 +54,27 @@ function(id=1, filename="mean_centre_Output.txt", weighted=FALSE, weights=NULL, 
   } 
 
 	# STORE COORDINATES OF THE MEAN CENTRE      
-	coordsMC <- cbind(1, centre.xy[1], centre.xy[2])
+	coordsMC <- cbind(centre.xy[1], centre.xy[2])
     
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
-    outtabMC <- cbind(id, coordsMC)
+    meanloc <- cbind(id, coordsMC)
+	colnames(meanloc)=c("id","x","y")
+    write.table(meanloc, sep=",", file=filename, col.names=FALSE)
 
-    write.table(outtabMC, sep=",", append=TRUE, file=filename, col.names=FALSE)	
+	# DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
+	assign("meanloc", meanloc, pos=1)	
 	
 	# STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
 	r.mean <- list(id = id, points = points, weighted = weighted, weights = weights, 
 	              CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2]) 
 	assign("r.mean", r.mean, pos=1)
     
-    # PROVIDE THE MEAN CENTRE COORDINATES AS A RETURN PARAMETER TO THE CALLING FUNCTION
-    result.mean <- list("id"=id, "weighted"=weighted, "weights"=weights, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2])
-	return(result.mean)  
+    # STORE MEAN CENTRE ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
+    result.mean <- list("id"=id, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2])
+	result.mean<-as.data.frame(result.mean)
+	print(result.mean)  
+	
+	# DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
+	assign("meanatt", result.mean, pos=1)
 }
 

@@ -1,7 +1,6 @@
 "plot_sdd" <-
 function(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='black', weightedpts.pch=19, plotpoints=TRUE, points.col='black', 
-         points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, plotcentral=FALSE, central.col='green', central.pch=19, plotmedian=FALSE, 
-		 median.col='blue', median.pch=17, plotCMD=FALSE, CMD.col='red', CMD.pch=17, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", 
+         points.pch=1, plotcentre=TRUE, centre.col='black', centre.pch=19, titletxt="Title", xaxis="Easting (m)", yaxis="Northing (m)", 
 		 sdd.col='black', sdd.lwd=2, jpeg=FALSE, ...) {
 
   #=======================================================
@@ -9,8 +8,8 @@ function(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='bla
   #  TITLE:     STANDARD DEVIATION DISTANCE (SDD) PLOT FUNCTION
   #  FUNCTION:  plot_sdd()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      November 21, 2009
-  #  CALLS:     ellipse3(), jpeg()
+  #  DATE:      March 28, 2011
+  #  CALLS:     jpeg()
   #  NOTES:     THE r.SDD OBJECT IS REQUIRED (GENERATED FROM THE 
   #             CALC_SDD FUNCTION) TO PLOT THE SDD CIRCLE. 
   #             THE PAR(...) OPTION ALLOWS FOR ADDITIONAL GRAPHICAL 
@@ -37,7 +36,7 @@ function(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='bla
 	      plot(1, type="n", asp=1, xlab=xaxis, ylab=yaxis, xlim=c(min.x, max.x), ylim=c(min.y, max.y))
 		  }
 		  
-	      ellipse3(r.SDD$CENTRE.x, r.SDD$CENTRE.y, r.SDD$SDD, r.SDD$SDD, as_radians(0), col=sdd.col, lwd=sdd.lwd)
+	      lines(r.SDD$coordsSDD, col=sdd.col, lwd=sdd.lwd)
 		  title(paste(titletxt, sep=""))
 		  
 	      if(plothv) {
@@ -59,21 +58,6 @@ function(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, weightedpts.col='bla
 	      if(plotcentre) {
 	        # ADD THE CENTRE POINT (NON-WEIGHTED/WEIGHTED/USER-DEFINED)
 	        points(r.SDD$CENTRE.x, r.SDD$CENTRE.y, col=centre.col, pch=centre.pch)
-	      }
-		  
-		  if(plotcentral) {
-	        # IDENTIFY THE CENTRAL FEATURE
-	        points(r.SDD$central.x, r.SDD$central.y, col=central.col, pch=central.pch)
-	      }
-
-		  if(plotmedian) {
-	        # ADD MEDIAN CENTRE POINT
-	        points(r.SDD$median.x, r.SDD$median.y, col=median.col, pch=median.pch)
-	      }
-		  
-		  if(plotCMD) {
-	        # ADD THE CENTRE OF MINIMUM DISTANCE POINT
-	        points(r.SDD$CMD.x, r.SDD$CMD.y, col=CMD.col, pch=CMD.pch)
 	      }
 		  
 		  if(jpeg) {
