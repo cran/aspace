@@ -34,5 +34,9 @@ yaxis="Northing (m)", box.col='black', box.lwd=2, jpeg=FALSE, ...)}
 }
 \examples{plot_box(plotnew=TRUE, plothv=FALSE, plotweightedpts=FALSE, 
 plotpoints=TRUE, plotcentre=TRUE, titletxt="Title", 
-xaxis="Easting (m)", yaxis="Northing (m)")}
+xaxis="Easting (m)", yaxis="Northing (m)")
+
+## plot_box by default takes as input the result produced from the calc_box, read from the current workspace. 
+
+}
 \keyword{arith}

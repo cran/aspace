@@ -11,5 +11,7 @@
   data(centre)
   str(centre)
   plot(centre)
+  
+## plot_centres by default takes as input the result produced from CF, CF2PTS, and CMD, read from the current workspace.
 }
 \keyword{datasets}

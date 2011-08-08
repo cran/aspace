@@ -136,10 +136,10 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   # IF tantheta IS NEGATIVE, IGNORE THE NEGATIVE SIGN BUT SUBTRACT THETA FROM 90
   # TO OBTAIN THE PROPER CLOCKWISE ROTATION ANGLE FROM THE TRANSPOSED AXES
   if(tantheta < 0) {
-    theta <- 90 - atan_d(abs(tantheta))
+    theta <- 180 + (atan_d(tantheta)) 
   }
   else {
-    theta <- atan_d(tantheta)
+    theta <- atan_d(tantheta) 
   }
     
   # COMPUTE OTHER TRIGONOMETRIC VALUES
