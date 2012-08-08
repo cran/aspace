@@ -1,4 +1,4 @@
-b48cf8880add941b767d534a2d7f9f58 *DESCRIPTION
+ff73e0f4d2508725e9a13a9d2a7d9814 *DESCRIPTION
 e2b92727156c9b0ef9e5397136862b7c *NAMESPACE
 9676090eb791add0d45a3aeeca4ea10b *R/CF.R
 3af84123bd1a7f336bfcc2f763045321 *R/CF2PTS.R
@@ -9,7 +9,7 @@ f09710627869517d461d0d72eb64c163 *R/as_radians.R
 10bf7ac91533b0299da01d4f90836888 *R/atan_d.R
 f1b26ce2acf489a19ea2303551850ea5 *R/calc_box.R
 98d539f116ea40567935b4a42261128f *R/calc_sdd.R
-9495c58c9a927f6957cb0d7d25e9e881 *R/calc_sde.R
+482d5e3d3d36628bec643e72f0b37c81 *R/calc_sde.R
 205477c332ec136381da5269736b078a *R/cos_d.R
 939f36b43d1c9a899c44a79c1c11f3f3 *R/distances.R
 0e0fe1400e3736323dd8602c39e835e2 *R/mean_centre.R
@@ -35,12 +35,12 @@ f71566d3b7f7d269aef149c0ef46e1bf *man/activities.Rd
 4835d842847da634e48a7d2bec9b4748 *man/activities2.Rd
 7c0c46f015344f446f21dc5fdb74dd54 *man/as_radians.Rd
 4463cbc7768cac294a6eaeff584ff5c7 *man/asin_d.Rd
-6ae2a0f6fc5a52d4222185407938c027 *man/aspace.package.Rd
+3036ace78f3fdee67442c2df530c9972 *man/aspace.package.Rd
 1fb468f0dc1136912d2999bc173cde24 *man/atan_d.Rd
 33dc438beabec23c1b923033b92d7641 *man/calc_box.Rd
 bad684bbffac9be33d0c57cf549c2507 *man/calc_sdd.Rd
 46d4d778edd74be64f5079a4a6be9f1b *man/calc_sde.Rd
-e2b7b786a2436e331967aadf2001cce5 *man/centre.Rd
+cc749f35138aa912479095b5b8074375 *man/centre.Rd
 3a26208b1022db76c225fdfd4f5c47a8 *man/cos_d.Rd
 80c804c070f68aac913b3f553f763c95 *man/distances.Rd
 cbf1fbb5abf1f876fa1393f1a60716b3 *man/mean_centre.Rd

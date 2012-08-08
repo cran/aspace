@@ -3,8 +3,8 @@ Type: Package
 Title: A collection of functions for estimating centrographic
         statistics and computational geometries for spatial point
         patterns
-Version: 3.1
-Date: 2011-08-08
+Version: 3.2
+Date: 2012-08-08
 Author: Randy Bui, Ron N. Buliung, Tarmo K. Remmel
 Maintainer: Ron N. Buliung <ron.buliung@utoronto.ca>
 Description: A collection of functions for computing centrographic
@@ -27,6 +27,6 @@ Description: A collection of functions for computing centrographic
 License: GPL (>= 2)
 Depends: R (>= 2.15.1), splancs, Hmisc, shapefiles
 LazyData: yes
-Packaged: 2012-08-08 06:41:26 UTC; Randy Bui
+Packaged: 2012-08-13 19:43:52 UTC; Randy Bui
 Repository: CRAN
-Date/Publication: 2012-08-08 07:09:02
+Date/Publication: 2012-08-14 12:37:42

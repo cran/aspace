@@ -6,7 +6,7 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #  TITLE:     STANDARD DEVIATION ELLIPSE (SDE) CALCULATOR
   #  FUNCTION:  calc_sde()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO REMMEL
-  #  DATE:      March 28, 2011
+  #  DATE:      August 08, 2012
   #  CALLS:     atan_d(), sin_d(), cos_d(), atan_d()
   #  NOTES:     NOTE THAT R TRIGONOMETRIC FUNCTIONS ARE IN RADIANS NOT DEGREES.
   #             WMC:  WEIGHTED MEAN CENTRE
@@ -133,7 +133,7 @@ function(id=1, filename="SDE_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   tantheta <- (top1 + top2 ) / bottom
   }  
   
-  # IF tantheta IS NEGATIVE, IGNORE THE NEGATIVE SIGN BUT SUBTRACT THETA FROM 90
+  # IF tantheta IS NEGATIVE, ADD 180 TO INVERSE TANGENT OF TANTHETA IN DEGREES
   # TO OBTAIN THE PROPER CLOCKWISE ROTATION ANGLE FROM THE TRANSPOSED AXES
   if(tantheta < 0) {
     theta <- 180 + (atan_d(tantheta)) 
