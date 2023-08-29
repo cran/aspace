@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(sin(theta*pi/180))
-}
-
+  
+} # END FUNCTION: sin_d

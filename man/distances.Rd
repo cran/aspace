@@ -2,7 +2,7 @@
 \alias{distances}
 \title{Multiple Euclidean distance calculator}
 \description{Compute distances from a source location (point) to a series of destination locations (points).}
-\usage{distances(centre.xy = centre, destmat = activities, verbose = FALSE)}
+\usage{distances(centre.xy = NULL, destmat = NULL, verbose = FALSE)}
 \arguments{
   \item{centre.xy}{Two-element vector containing x,y coordinates of the source location}
   \item{destmat}{Two-column matrix or data frame containing x,y coordinates of the activity locations}

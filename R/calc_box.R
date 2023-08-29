@@ -1,14 +1,14 @@
 "calc_box" <-
-function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=activities, verbose=FALSE) {
+function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=NULL, verbose=FALSE) {
 
   #=======================================================
   #
   #  TITLE:     STANDARD DEVIATION BOX CALCULATOR
   #  FUNCTION:  calc_box()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      March 28, 2011
+  #  DATE:      25 AUGUST 2023
   #  CALLS:     distances()
-  #  NEEDS:     LIBRARIES: Hmisc
+  #  NEEDS:     LIBRARIES: NA (Originally needed Hmisc)
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE SD BOX; THIS VALUE IS ADDED TO THE OUTPUT filename
   #             AS AN IDENTIFIER THAT CAN BE USED TO EXTRACT RECORDS WHEN 
@@ -39,10 +39,9 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #		boxatt		ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
   #		boxloc		UNIQUE ID AND X,Y COORDINATES OF VERTICES FOR POST-PROCESSING INTO SD BOX SHAPEFILE
   #
+  # CALL:           garg <- calc_box(id=1, points=activities)
+  #
   #=======================================================
-
-  # SET DEPENDENCIES
-  require(Hmisc)
   
   # INITIALIZE ERROR CODE TO NO ERROR
   errorcode <- 1000
@@ -55,10 +54,10 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
 	  # ERROR: INVALID COMBINATION: calccentre=TRUE AND centre.xy!=NULL
       # SET DESCRIPTIVE ERROR CODE AND GIVE WARNING
       errorcode <- 21
-      cat("\n\nWARNING: Invalid combination: calccentre=TRUE and centre.xy!=NULL")
-	  cat("\nERROR CODE: ", errorcode, "\n\n", sep="")
+      warning("\n\nWARNING: Invalid combination: calccentre=TRUE and centre.xy!=NULL")
+	  warning("\nERROR CODE: ", errorcode, "\n\n", sep="")
       return("ERROR")
-	}
+	} # END IF
 	else {
 	  if(weighted) {
 		# WEIGHT THE POINTS
@@ -70,16 +69,16 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
         WMC.y <- c( sum(wt.y) / sum(weights) )    
         centre.xy[1] <- WMC.x
         centre.xy[2] <- WMC.y
-       }
+       } # END IF
 	  else {
         # COMPUTE AND USE MEAN CENTRE RATHER THAN USER SPECIFIED LOCATION AS CENTRE (NON-WEIGHTED)
         meanx <- sum(points[,1])/n
         meany <- sum(points[,2])/n
         centre.xy[1] <- meanx
         centre.xy[2] <- meany
-      } 
-    }
-  }   
+      } # END ELSE
+    } # END ELSE
+  } # END IF
   
   # INITIALIZE FUNCTION VARIABLE WITH PARAMETER VALUE
   dist <- distances(centre.xy, points)
@@ -87,66 +86,72 @@ function(id=1, filename="BOX_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   # TEST WHETHER A SUFFICIENT NUMBER OF POINTS WERE SUPPLIED
   if(length(dist) >= 3) {
 
-	  if(weighted) {		
-	  #PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
-	  SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
+    if(weighted) {
+      # PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
+      SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
 	  
 	  # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
-	  SDx <- sqrt(wtd.var(points[,1], weights))
-	  SDy <- sqrt(wtd.var(points[,2], weights))
-	  }
-	  else {
+	  SDx <- sqrt(Hmisc::wtd.var(points[,1], weights))
+	  SDy <- sqrt(Hmisc::wtd.var(points[,2], weights))
+    } # END IF
+    else {
 	  # PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (SDD)
 	  SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
 	  
 	  # COMPUTE AND ADD THE STANDARD DEVIATION OF THE X AND Y COORDINATES
 	  SDx <- sd(points[,1])
 	  SDy <- sd(points[,2])
-	  }
+    } # END ELSE
 
-	  # COMPUTE THE AREA OF THE SD BOX
-	  areabox <- (2*SDx) * (2*SDy)  	
+    # COMPUTE THE AREA OF THE SD BOX
+    areabox <- (2*SDx) * (2*SDy)
 	 
-	  # STORE THE COORDINATES OF EACH CORNER OF THE SD BOX IN SEPARATE OBJECTS   
-	  NW <- cbind((centre.xy[1] - (SDx)), (centre.xy[2] + (SDy)))
-	  NE <- cbind((centre.xy[1] + (SDx)), (centre.xy[2] + (SDy)))
-	  SW <- cbind((centre.xy[1] - (SDx)), (centre.xy[2] - (SDy)))
-	  SE <- cbind((centre.xy[1] + (SDx)), (centre.xy[2] - (SDy)))
-	  box.points <- rbind(NW, NE, SE, SW)
-	  coordsBOX <- cbind(box.points[,1], box.points[,2])
+    # STORE THE COORDINATES OF EACH CORNER OF THE SD BOX IN SEPARATE OBJECTS
+    NW <- cbind((centre.xy[1] - (SDx)), (centre.xy[2] + (SDy)))
+    NE <- cbind((centre.xy[1] + (SDx)), (centre.xy[2] + (SDy)))
+    SW <- cbind((centre.xy[1] - (SDx)), (centre.xy[2] - (SDy)))
+    SE <- cbind((centre.xy[1] + (SDx)), (centre.xy[2] - (SDy)))
+    box.points <- rbind(NW, NE, SE, SW)
+    coordsBOX <- cbind(box.points[,1], box.points[,2])
     
+    # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
     boxloc <- as.data.frame(cbind(id, coordsBOX))
-	colnames(boxloc)=c("id","x","y")
-    write.table(boxloc, sep=",", file=filename, col.names=FALSE)
-
-	# DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-	assign("boxloc", boxloc, pos=1)	
+	colnames(boxloc) <- c("id","x","y")
 	
     # STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
 	r.BOX <- list(id = id, points = points, calccentre = calccentre, weighted = weighted, weights = weights, CENTRE.x = centre.xy[1], 
 	              CENTRE.y = centre.xy[2], SDD = SDD, SDx = SDx, SDy = SDy, Box.area = areabox, NW.coord = NW, NE.coord = NE, 
 				  SW.coord = SW, SE.coord = SE)
-	assign("r.BOX", r.BOX, pos=1)
-	
+
+    # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
     # STORE SD BOX ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
     result.box <- list("id"=id, "calccentre"=calccentre, "weighted" = weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2],
 					   "SD.x"=SDx, "SD.y"=SDy, "Box.area"=areabox, "NW.coord"=NW, "NE.coord"=NE, "SW.coord"=SW, "SE.coord"=SE)   
-	result.box<-as.data.frame(result.box)
-	print(result.box)
-
-	# DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-	assign("boxatt", result.box, pos=1)		
+	result.box <- as.data.frame(result.box)
+    
+    if(verbose) {
+	  print(result.box)
+    } # END IF
+        
+    # RETURN LIST WITH FIVE ELEMENTS:
+    # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+    # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+    # ELEMENT 3: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+    # ELEMENT 2: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+    # ELEMENT 3: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+    returnlist <- list("TYPE"="BOX", "DATE"=date(), "LOCATIONS"=boxloc, "FORPLOTTING"=r.BOX, "ATTRIBUTES"=result.box)
+    return(returnlist)
   }
   else {
     # ERROR: TOO FEW POINTS: NEED >= 3
     # SET DESCRIPTIVE ERROR CODE AND GIVE WARNING
     errorcode <- 25
     if(verbose) {
-      cat("\n\nWARNING: Not enough values to compute SDD.")
-      cat("\nERROR CODE: ", errorcode, "\n\n", sep="")
-    }
+      warning("\n\nWARNING: Not enough values to compute SDD.")
+      warning("\nERROR CODE: ", errorcode, "\n\n", sep="")
+    } # END IF
     return("ERROR")
-  }
+  } # END ELSE
  
-}
+} # END FUNCITON: calc_box

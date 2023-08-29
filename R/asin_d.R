@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(asin(theta)*180/pi)
-}
-
+  
+} # END FUNCTION: asin_d

@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(acos(theta)*180/pi)
-}
-
+  
+} # END FUNCTION: acos_d

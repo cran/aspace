@@ -1,5 +1,5 @@
 "distances" <-
-function(centre.xy=centre, destmat=activities, verbose=FALSE) {
+function(centre.xy=NULL, destmat=NULL, verbose=FALSE) {
   
   #=======================================================
   #
@@ -10,6 +10,7 @@ function(centre.xy=centre, destmat=activities, verbose=FALSE) {
   #  CALLS:     NA
   #  NEEDS:     A VECTOR INPUT HOLDING THE EASTING AND
   #             NORTHING COORDINATES OF A CENTRE
+  #             AND A MATRIX OF THE DESTINATIONS
   #  NOTES:     RETURNS A VECTOR OF DISTANCES TO EACH
   #               ACTIVITY LOCATION FROM THE SPECIFIED CENTRE
   #             COLUMN 1 IS EASTING (x) IN UTM COORDINATES
@@ -18,11 +19,14 @@ function(centre.xy=centre, destmat=activities, verbose=FALSE) {
   #               50  TOO MANY COLUMNS IN DESTINATION MATRIX
   #               51  TOO FEW COLUMNS IN DESTINATION MATRIX
   #
+  # CALL:       garb <- centre.xy=centre, destmat=activities, verbose=FALSE)
+  #
   #=======================================================
 
   # GIVEN A MATRIX OF EASTING AND NORTHING UTM COORDINATES FOR A SET OF POINT
   # LOCATIONS, COMPUTE THE EUCLIDEAN DISTANCE FROM A SELECTED 
-  # CENTRE TO EACH POINT LOCATION INDEPENDENTLY - IMPORTANT NOTE: THE FUNCTION ASSUMES PLANAR COORDINATES (UNIVERSE TRANSVERSE MERCATOR)
+  # CENTRE TO EACH POINT LOCATION INDEPENDENTLY
+  # IMPORTANT NOTE: THE FUNCTION ASSUMES PLANAR COORDINATES (UNIVERSAL TRANSVERSE MERCATOR)
   
   # INITIALIZE ERROR CODE TO NO ERROR
   errorcode <- 1000
@@ -52,5 +56,4 @@ function(centre.xy=centre, destmat=activities, verbose=FALSE) {
   # PROVIDE THE VECTOR OF DISTANCES, di, AS A RETURN PARAMETER TO THE CALLING FUNCTION
   return(di)
   
-}
-
+} # END FUNCTION: distances

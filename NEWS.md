@@ -1,0 +1,25 @@
+# aspace 4.0.1
+* Improvements
+    * Shortened title as required.
+    * Updated package description. 
+    * Added necessary Rd-tags on man pages.
+    * Moved cat() statements to warning() and message() formats.
+    * Ensured that user environments are properly restored after functions exit.
+
+# aspace 4.0.0
+* Major Items
+    * Resurrecting aspace from its current archived state by addressing flags and errors.
+    * Functions no longer write .txt files but rather return list objects.
+    * Global variables are eliminated to adhere to R guidelines.
+    * Calculation output objects are consistently encoded.
+    * Functions provide greater error-trapping to ensure valid inputs are provided.
+    * Functions CMD() and plot_centres() are currently disabled due to issues. Hope to have them active again for the next version.
+    * Eliminated reliance on 'shapefiles' package.
+* Improvements
+    * Functions return consistently structured objects rather than writing them to the workspace.
+* Bugfixes
+    * Updates and adjustments to manual pages.
+* Future Plans
+    * Incorporate vector geographic data objects with package 'terra'.
+    * Produce a generic plotting function, eliminating the need for multiple forms.
+

@@ -2,33 +2,45 @@
 \alias{CF2PTS}
 \title{Central feature between 2 point patterns (CF2PTS) Calculator}
 \description{Central feature of point2 within point1. Identifies the central feature as the point location in the first pattern that has the smallest cummulative distance to features in a second point pattern.}
-\usage{CF2PTS(id=1, filename="CF2PTS_Output.txt", points1=activities, points2=activities2)}
+\usage{CF2PTS(id=1, points1=NULL, points2=NULL, verbose=FALSE)}
 \arguments{
   \item{id}{A unique integer to identify the CF2PTS}
-  \item{filename}{A string indicating the ASCII textfile where the central feature coordinates will be written}
-  \item{points1}{A 2-column matrix or data frame containing the set of point observations}
-  \item{points2}{A 2-column matrix or data frame containing the set of point observations}
+  \item{points1}{A 2-column matrix or data frame containing the first set of point observations}
+  \item{points2}{A 2-column matrix or data frame containing the second set of point observations}
+  \item{verbose}{A Boolean flag to control verbose reporting on monitor}
 }
-\details{Use the cf2ptsloc (coordinates) and cf2ptsatt (attributes) to produce shapefiles using the convert.to.shapefile 
-and write.shapefile from the shapefiles library}
+\details{Use the LOCATIONS element in the output list object along with the ATTRIBUTES elements can be used to produce shapefiles or other vector point files for geographic data.}
 \value{
-  The result is a list of terms:
-  \item{id}{Identifier for the central feature - it should be unique}
-  \item{CF2PTS.x}{X-coordinate of the central feature}
-  \item{CF2PTS.y}{Y-coordinate of the central feature}
+  The returned result is a list:
+  \item{TYPE}{The type of calculation results stored in the object: BOX, SDD, SDE, CF, or CF2PTS}
+  \item{DATE}{The date and time that the function was run}
+  \item{LOCATIONS}{Locations pertinent for the BOX that can be used with ATTRIBUTES if wishing to build a vector point file for geographic data outside of this pacakge.}
+  \item{FORPLOTTING}{Coordinates and identifiers used for plotting.}
+  \item{ATTRIBUTES}{Attributes for the output BOX that can be used with LOCATIONS coordinates if wishing to build a vector point file for geographic data outside of this package.}
+
+    \item{id}{Identifier for the central feature - it should be unique}
+    \item{CF2PTS.x}{X-coordinate of the central feature}
+    \item{CF2PTS.y}{Y-coordinate of the central feature}
   }
 \author{Randy Bui, Ron Buliung}
-\note{Results are stored in the r.CF2PTS object and can be passed through plotting functions. This function can also be used repetitively within a loop to compute multiple CF2PTS centres from different datasets.}
+\note{Results specific for plotting are stored in the FORPLOTTING element within the produced list object. This function can be used on its own (once) or repetitively in a loop to process grouped point data stored in a larger table. When used repetitively, be sure to increment the id argument to ensure that each CF2PTS has a unique identifier.}
 \seealso{
-  \code{\link{CF}}, \code{\link{CMD}},
+  \code{\link{CF}},
   \code{\link{median_centre}}
 }
 \examples{
-## CF2PTS example
-CF2PTS(id=1, filename="CF2PTS_Output.txt", points1=activities, points2=activities2)
+# CF2PTS EXAMPLE
+data(activities)
+data(activities2)
+a <- CF2PTS(id=1, points1=activities, points2=activities2)
+str(a)
+print(a)
 
-## CF2PTS to shapefile example (exclude the comments below to run script)
-## shp <- convert.to.shapefile(cf2ptsloc,cf2ptsatt,"id",5)
-## write.shapefile(shp, "CF2PTS_Shape", arcgis=T)
+# IF THE RESULT OF THIS FUNCTION IS STORED TO AN OBJECT, THE plot_box()
+# FUNCTION WILL TAKE THAT OBJECT AS INPUT FOR PLOTTING VIA THE datin ARGUMENT
+
+# CF2PTS TO SHAPEFILE EXAMPLE (REMOVE THE COMMENTS TO RUN)
+# shp <- convert.to.shapefile(a$LOCATIONS, a$ATTRIBUTES, "id", 5)
+# write.shapefile(shp, "CF2PTS_Shape", arcgis=T)
 }
 \keyword{arith}

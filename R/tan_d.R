@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(tan(theta*pi/180))
-}
-
+  
+} # END FUNCTION: tan_d

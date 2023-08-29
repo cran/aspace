@@ -1,12 +1,12 @@
 "calc_sdd" <-
-function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=activities, verbose=FALSE) {
+function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, points=NULL, verbose=FALSE) {
 
   #=======================================================
   #
   #  TITLE:     STANDARD DEVIATION DISTANCE (SDD) CALCULATOR
   #  FUNCTION:  calc_sdd()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      March 28, 2011
+  #  DATE:      24 AUGUST 2023
   #  CALLS:     distances(), as_radians()
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE SDD CIRCLE; THIS VALUE IS ADDED TO THE OUTPUT filename
@@ -32,6 +32,9 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   #		SDD.area	AREA OF SDD
   #		sddatt		ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
   #		sddloc		UNIQUE ID AND X,Y COORDINATES OF VERTICES FOR POST-PROCESSING INTO SDD SHAPEFILE
+  #
+  # CALL:           garb <- calc_sdd(id=1, points=activities)
+  #
   #=======================================================
   
   # INITIALIZE ERROR CODE TO NO ERROR
@@ -45,8 +48,8 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
 	  # ERROR: INVALID COMBINATION: calccentre=TRUE AND centre.xy!=NULL
       # SET DESCRIPTIVE ERROR CODE AND GIVE WARNING
       errorcode <- 21
-      cat("\n\nWARNING: Invalid combination: calccentre=TRUE and centre.xy!=NULL")
-	  cat("\nERROR CODE: ", errorcode, "\n\n", sep="")
+      warning("\n\nWARNING: Invalid combination: calccentre=TRUE and centre.xy!=NULL")
+	  warning("\nERROR CODE: ", errorcode, "\n\n", sep="")
       return("ERROR")
 	}
 	else {
@@ -78,13 +81,13 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
   if(length(dist) >= 3) {
 	
 	if(weighted) {		
-	#PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
-	SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
-	}
+	  #PERFORM THE WEIGHTED STANDARD DEVIATION DISTANCE COMPUTATION (WEIGHTED SDD)
+	  SDD <- sqrt(sum((weights*dist^2)/((sum(weights)) - 2) ) )
+	} # END IF
 	else {
-	# PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (UNWEIGHTED SDD)
-	SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
-	}
+	  # PERFORM THE STANDARD DEVIATION DISTANCE COMPUTATION (UNWEIGHTED SDD)
+	  SDD <- sqrt(sum(dist^2/(length(dist) - 2) ) )
+	} # END ELSE
 	
     # COMPUTE SDD AREA
     sddarea <- pi * SDD^2
@@ -106,34 +109,45 @@ function(id=1, filename="SDD_Output.txt", centre.xy=NULL, calccentre=TRUE, weigh
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
 	sddloc <- as.data.frame(cbind(id, coordsSDD))
 	colnames(sddloc)=c("id","x","y")
-    write.table(sddloc, sep=",", file=filename, col.names=FALSE)
+    #write.table(sddloc, sep=",", file=filename, col.names=FALSE)
 	
 	# DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-	assign("sddloc", sddloc, pos=1)	
+	#assign("sddloc", sddloc, pos=1)
 
 	# STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
 	r.SDD <- list(id = id, points = points, coordsSDD = coordsSDD, SDD = SDD, calccentre = calccentre, weighted = weighted, weights = weights, 
 	                   CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], SDD.area = sddarea) 
-	assign("r.SDD", r.SDD, pos=1)
+	#assign("r.SDD", r.SDD, pos=1)
     
-    # STORE SDD ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
+    # STORE SDD ATTRIBUTES INTO A DATA FRAME AND PRINT RESULTS
     result.sdd <- list("id"=id, "calccentre"=calccentre, "weighted"=weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2],
 					   "SDD.radius"=SDD, "SDD.area"=sddarea)
-	print(result.sdd)
-	result.sdd<-as.data.frame(result.sdd)
-
+	result.sdd <- as.data.frame(result.sdd)
+    if(verbose) {
+      print(result.sdd)
+    } # END IF
+    
 	# DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-	assign("sddatt", result.sdd, pos=1)	
-  }
+	#assign("sddatt", result.sdd, pos=1)
+    
+    # BUILD RETURN LIST OBJECT WITH 3 ELEMENTS
+    # ELEMENT 1: FOR ASCII OUTPUT AND SHAPEFILE CREATION
+    # ELEMENT 2: LIST REQUIRED FOR PLOTTING BY plot_sdd()
+    # ELEMENT 3: DATAFRAME WITH ATTRIBUTES
+    #returnlist <- list("sddloc"=sddloc, "r.SDD"=r.SDD, "sddatt"=result.sdd)
+    returnlist <- list("TYPE"="SDD", "DATE"=date(), "LOCATIONS"=sddloc, "FORPLOTTING"=r.SDD, "ATTRIBUTES"=result.sdd)
+    return(returnlist)
+    
+  } # END IF
   else {
     # ERROR: TOO FEW POINTS: NEED >= 3
     # SET DESCRIPTIVE ERROR CODE AND GIVE WARNING
     errorcode <- 25
     if(verbose) {
-      cat("\n\nWARNING: Not enough values to compute SDD.")
-      cat("\nERROR CODE: ", errorcode, "\n\n", sep="")
-    }
+      warning("\n\nWARNING: Not enough values to compute SDD.")
+      warning("\nERROR CODE: ", errorcode, "\n\n", sep="")
+    } # END IF
     return("ERROR")
-  }
-}
-
+  } # END ELSE
+  
+} # END FUNCTION: calc_sdd

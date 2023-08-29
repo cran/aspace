@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(theta*pi/180)
-}
-
+  
+} # END FUNCTION: as_radians

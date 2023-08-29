@@ -1,1 +1,7 @@
-export(sin_d, cos_d, tan_d, asin_d, acos_d, atan_d, as_radians, calc_sdd, calc_sde, calc_box, plot_sdd, plot_sde, plot_box, plot_centres, mean_centre, median_centre, CMD, CF, CF2PTS, distances)
+export(sin_d, cos_d, tan_d, asin_d, acos_d, atan_d, as_radians, calc_sdd, calc_sde, calc_box, plot_sdd, plot_sde, plot_box, mean_centre, median_centre, CF, CF2PTS, distances)
+importFrom("grDevices", "chull", "dev.off")
+importFrom("graphics", "abline", "lines", "par", "points", "segments", "title")
+importFrom("stats", "median", "sd")
+importFrom("utils", "write.table")
+importFrom("splancs", "gridpts")
+importFrom("Hmisc", "wtd.var")

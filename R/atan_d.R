@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(atan(theta)*180/pi)
-}
-
+  
+} # END FUNCTION: atan_d

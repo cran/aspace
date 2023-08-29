@@ -14,5 +14,5 @@ function(theta=0) {
   #=======================================================
 
   return(cos(theta*pi/180))
-}
-
+  
+} # END FUNCTION: cos_d
