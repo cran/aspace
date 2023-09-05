@@ -1,12 +1,12 @@
-"CF2PTS" <-
+"calc_cf2pts" <-
 function(id=1, points1=NULL, points2=NULL, verbose=FALSE) {
 
   #=======================================================
   #
   #  TITLE:     CENTRAL FEATURE BETWEEN TWO POINT PATTERNS (CF2PTS) CALCULATOR 
-  #  FUNCTION:  CF2PTS()
+  #  FUNCTION:  calc_cf2pts()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K REMMEL
-  #  DATE:      24 AUGUST 2023
+  #  DATE:      29 AUGUST 2023
   #  CALLS:     distances()
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE CF2PTS; THIS VALUE IS ADDED TO THE OUTPUT filename
@@ -65,13 +65,20 @@ function(id=1, points1=NULL, points2=NULL, verbose=FALSE) {
   # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
   # STORE CF2PTS ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
   result.CF2PTS <- list("id"=id, "CF2PTS.x"=x.CF2PTS, "CF2PTS.y"=y.CF2PTS)
-  result.CF2PTS<-as.data.frame(result.CF2PTS)
+  result.CF2PTS <- as.data.frame(result.CF2PTS)
+  
   if(verbose) {
     print(result.CF2PTS)
   } # END IF
   
-  # BUILD RETURN LIST OBJECT
-  returnlist <- list("TYPE"="CF2PTS", "DATE"=date(), "LOCATIONS"=cf2ptsloc, "FORPLOTTING"=r.CF2PTS, "ATTRIBUTES"=result.CF2PTS)
+  # RETURN LIST WITH SIX ELEMENTS:
+  # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+  # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+  # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+  # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+  # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+  # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+  returnlist <- list("TYPE"="CF2PTS", "DATE"=date(), "ID"=id, "LOCATIONS"=cf2ptsloc, "FORPLOTTING"=r.CF2PTS, "ATTRIBUTES"=result.CF2PTS)
   return(returnlist)
 
-} # END FUNCTION: CF2PTS
+} # END FUNCTION: calc_cf2pts

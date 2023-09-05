@@ -1,10 +1,10 @@
-"mean_centre" <-
+"calc_mnc" <-
 function(id=1, weighted=FALSE, weights=NULL, points=NULL, verbose=FALSE) {
     
   #=======================================================
   #
   #  TITLE:     MEAN CENTRE CALCULATOR
-  #  FUNCTION:  mean_centre()
+  #  FUNCTION:  calc_mnc()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
   #  DATE:      March 28, 2011
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
@@ -58,30 +58,31 @@ function(id=1, weighted=FALSE, weights=NULL, points=NULL, verbose=FALSE) {
   # STORE COORDINATES OF THE MEAN CENTRE
   coordsMC <- cbind(centre.xy[1], centre.xy[2])
     
+  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
   # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
   meanloc <- cbind(id, coordsMC)
   colnames(meanloc)=c("id","x","y")
-  #write.table(meanloc, sep=",", file=filename, col.names=FALSE)
-    
-  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("meanloc", meanloc, pos=1)
     
   # STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
   r.mean <- list(id = id, points = points, weighted = weighted, weights = weights, CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2])
-  #assign("r.mean", r.mean, pos=1)
-    
+  
+  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
   # STORE MEAN CENTRE ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
   result.mean <- list("id"=id, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2])
   result.mean <- as.data.frame(result.mean)
+ 
   if(verbose) {
     print(result.mean)
   } # END IF
-  
-  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("meanatt", result.mean, pos=1)
-    
-  # BUILD RETURN LIST OBJECT
-  returnlist <- list("meanloc"=meanloc, "r.mean"=r.mean, "meanatt"=result.mean)
+      
+  # RETURN LIST WITH SIX ELEMENTS:
+  # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+  # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+  # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+  # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+  # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+  # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+  returnlist <- list("TYPE"="MNC", "DATE"=date(), "ID"=id, "LOCATIONS"=meanloc, "FORPLOTTING"=r.mean, "ATTRIBUTES"=result.mean)
   return(returnlist)
     
-} # END FUNCITON: mean_centre
+} # END FUNCITON: calc_mnc

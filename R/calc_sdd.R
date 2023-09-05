@@ -106,36 +106,33 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
     sa <- sin(al)
     coordsSDD <- xy %*% rbind(c(ca, sa), c(-sa, ca)) + cbind(rep(centre.xy[1], 360), rep(centre.xy[2], 360))
     
+    # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
     # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
 	sddloc <- as.data.frame(cbind(id, coordsSDD))
 	colnames(sddloc)=c("id","x","y")
-    #write.table(sddloc, sep=",", file=filename, col.names=FALSE)
-	
-	# DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-	#assign("sddloc", sddloc, pos=1)
 
 	# STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
 	r.SDD <- list(id = id, points = points, coordsSDD = coordsSDD, SDD = SDD, calccentre = calccentre, weighted = weighted, weights = weights, 
 	                   CENTRE.x = centre.xy[1], CENTRE.y = centre.xy[2], SDD.area = sddarea) 
-	#assign("r.SDD", r.SDD, pos=1)
     
+    # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
     # STORE SDD ATTRIBUTES INTO A DATA FRAME AND PRINT RESULTS
     result.sdd <- list("id"=id, "calccentre"=calccentre, "weighted"=weighted, "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2],
 					   "SDD.radius"=SDD, "SDD.area"=sddarea)
 	result.sdd <- as.data.frame(result.sdd)
+    
     if(verbose) {
       print(result.sdd)
     } # END IF
     
-	# DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-	#assign("sddatt", result.sdd, pos=1)
-    
-    # BUILD RETURN LIST OBJECT WITH 3 ELEMENTS
-    # ELEMENT 1: FOR ASCII OUTPUT AND SHAPEFILE CREATION
-    # ELEMENT 2: LIST REQUIRED FOR PLOTTING BY plot_sdd()
-    # ELEMENT 3: DATAFRAME WITH ATTRIBUTES
-    #returnlist <- list("sddloc"=sddloc, "r.SDD"=r.SDD, "sddatt"=result.sdd)
-    returnlist <- list("TYPE"="SDD", "DATE"=date(), "LOCATIONS"=sddloc, "FORPLOTTING"=r.SDD, "ATTRIBUTES"=result.sdd)
+	# RETURN LIST WITH SIX ELEMENTS:
+    # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+    # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+    # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+    # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+    # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+    # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+    returnlist <- list("TYPE"="SDD", "DATE"=date(), "ID"=id, "LOCATIONS"=sddloc, "FORPLOTTING"=r.SDD, "ATTRIBUTES"=result.sdd)
     return(returnlist)
     
   } # END IF

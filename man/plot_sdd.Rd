@@ -29,7 +29,7 @@ yaxis="Northing (m)", sdd.col='black', sdd.lwd=2, jpeg=FALSE, ...)}
   \item{...}{Arguments to be passed to graphical parameters}
 }
 \value{This function returns a plot in the graphics device.}
-\details{The element FORPLOTTING containe within the calc_box() output object is required to plot an SD Box. Provide the whole plot_box() output object as the argment for datin.}
+\details{The element FORPLOTTING contained within the calc_box() output object is required to plot an SD Box. Provide the whole plot_box() output object as the argment for datin.}
 \author{Tarmo K. Remmel, Randy Bui, Ron N. Buliung}
 \seealso{
   \code{\link{plot_sde}}, \code{\link{plot_box}}

@@ -1,10 +1,10 @@
-"median_centre" <-
+"calc_mdc" <-
 function(id=1, points=NULL, verbose=FALSE) {
     
   #=======================================================
   #
   #  TITLE:     MEDIAN CENTRE CALCULATOR
-  #  FUNCTION:  median_centre()
+  #  FUNCTION:  calc_mdc()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
   #  DATE:      24 AUGUST 2023
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
@@ -24,7 +24,7 @@ function(id=1, points=NULL, verbose=FALSE) {
   #		medianatt	ATTRIBUTES ABOVE WRITTEN TO DATAFRAME FOR POST-PROCESSING AS SHAPEFILE
   #		medianloc	UNIQUE ID AND X,Y COORDINATES OF THE POINT FOR POST-PROCESSING AS SHAPEFILE
   #
-  # CALL:           garb <- median_centre(id=1, points=activities, verbose=FALSE)
+  # CALL:           garb <- calc_mdc(id=1, points=activities, verbose=FALSE)
   #
   #=======================================================
     
@@ -35,30 +35,31 @@ function(id=1, points=NULL, verbose=FALSE) {
   # STORE COORDINATES OF THE MEDIAN CENTRE
   coordsMC <- cbind(median.x, median.y)
     
+  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
   # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
   medianloc <- cbind(id, coordsMC)
   colnames(medianloc)=c("id","x","y")
-  #write.table(medianloc, sep=",", file=filename, col.names=FALSE)
-    
-  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("medianloc", medianloc, pos=1)
     
   # STORE RESULTS INTO A LIST (REQUIRED FOR PLOT FUNCTION)
   r.median <- list(id = id, points = points, median.x = median.x, median.y = median.y)
-  #assign("r.median", r.median, pos=1)
     
+  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
   # STORE MEDIAN CENTRE ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
   result.median <- list("id"=id, "median.x"=median.x, "median.y"=median.y)
   result.median <- as.data.frame(result.median)
+ 
   if(verbose) {
     print(result.median)
   } # END IF
-  
-  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("medianatt", result.median, pos=1)
 
-  # BUILD RETURN LIST OBJECT
-  returnlist <- list("medianloc"=medianloc, "r.median"=r.median, "medianatt"=result.median)
+  # RETURN LIST WITH SIX ELEMENTS:
+  # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+  # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+  # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+  # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+  # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+  # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+  returnlist <- list("TYPE"="MDC", "DATE"=date(), "ID"=id, "LOCATIONS"=medianloc, "FORPLOTTING"=r.median, "ATTRIBUTES"=result.median)
   return(returnlist)
 
 } # END FUNCTION: median_centre

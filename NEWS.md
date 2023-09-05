@@ -1,3 +1,14 @@
+# apsace 4.1.0
+* Improvements
+    * Inclusion of repaired and renamed function calc_cmd() that was previously CMD(). The change was to bring consistency across function naming.
+    * Inclusion of repaired function plot_centres(). 
+    * Renaming CF() to calc_cf() to bring consistency across function naming.
+    * Renaming CF2PTS() to calc_cf2pts() to bring consistency across function naming.
+    * Renaming mean_centre() to calc_mnc() to bring consistency across function naming.
+    * Renaming median_centre() to calc_mdc() to bring consistency across function naming.
+* Bugfixes
+    * Major clean-up and refresh of man pages for most functions.
+        
 # aspace 4.0.1
 * Improvements
     * Shortened title as required.

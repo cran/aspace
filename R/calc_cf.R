@@ -1,12 +1,12 @@
-"CF" <-
+"calc_cf" <-
 function(id=1, points=NULL, verbose=FALSE) {
     
   #=======================================================
   #
   #  TITLE:     CENTRAL FEATURE (CF) CALCULATOR
-  #  FUNCTION:  CF()
+  #  FUNCTION:  calc_cf()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K REMMEL
-  #  DATE:      24 AUGUST, 2023
+  #  DATE:      29 AUGUST, 2023
   #  CALLS:     distances()
   #  NOTES:     USE THE id PARAMETER TO SPECIFY A UNIQUE IDENTIFIER FOR
   #             THE CF; THIS VALUE IS ADDED TO THE OUTPUT filename
@@ -62,12 +62,19 @@ function(id=1, points=NULL, verbose=FALSE) {
   # STORE CF ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
   result.CF <- list("id"=id, "CF.x"=x.CF, "CF.y"=y.CF)
   result.CF <- as.data.frame(result.CF)
+  
   if(verbose) {
     print(result.CF)
   } # END IF
  
-  # BUILD RETURN LIST OBJECT
-  returnlist <- list("TYPE"="CF", "DATE"=date(), "LOCATIONS"=cfloc, "FORPLOTTING"=r.CF, "ATTRIBUTES"=result.CF)
+  # RETURN LIST WITH SIX ELEMENTS:
+  # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+  # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+  # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+  # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+  # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+  # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+  returnlist <- list("TYPE"="CF", "DATE"=date(), "ID"=id, "LOCATIONS"=cfloc, "FORPLOTTING"=r.CF, "ATTRIBUTES"=result.CF)
   return(returnlist)
   
-} # END FUNCTION: CF
+} # END FUNCTION: calc_cf

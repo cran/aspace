@@ -234,8 +234,8 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
                 Major = Major, Minor = Minor, theta = theta, Sigma.x = sigmax, Sigma.y = sigmay, Eccentricity = eccentricity, 
 				Area.sde = areaSDE, TanTheta = tantheta, SinTheta = sintheta, CosTheta = costheta, SinThetaCosTheta = sinthetacostheta, 
 				Sin2Theta = sin2theta, Cos2Theta = cos2theta, ThetaCorr = Theta.Corr, weighted = weighted, weights = weights)
-  #assign("r.SDE", r.SDE, pos=1)
 	
+  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
   # STORE SDE ATTRIBUTES INTO A DATA FRAME AND PRINTS RESULTS
   result.sde <- list("id"=id, "CALCCENTRE"=calccentre, "weighted"=weighted,
                      "CENTRE.x"=centre.xy[1], "CENTRE.y"=centre.xy[2], "Sigma.x"=sigmax, "Sigma.y"=sigmay,
@@ -243,24 +243,24 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
                      "TanTheta"=tantheta, "SinTheta"=sintheta, "CosTheta"=costheta, "SinThetaCosTheta"=sinthetacostheta,
                      "Sin2Theta"=sin2theta, "Cos2Theta"=cos2theta, "ThetaCorr"=Theta.Corr)
   result.sde<-as.data.frame(result.sde)
+
   if(verbose) {
     print(result.sde)
   } # END IF
 
-  # DATA FRAME OF ATTRIBUTES WITH FIRST COLUMN NAME "ID" FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("sdeatt", result.sde, pos=1)
-
+  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
   # CREATE ASCII OUTPUT FOR SHAPEFILE CREATION
   sdeloc <- as.data.frame(cbind(id, coordsSDE))
   colnames(sdeloc)=c("id","x","y")
-  #write.table(sdeloc, sep=",", file=filename, col.names=FALSE)
   
-  # DATA FRAME WITH COLUMNS IN ORDER ID, X-COORD, Y-COORD FOR CONVERT.TO.SHAPEFILE FUNCTION
-  #assign("sdeloc", sdeloc, pos=1)
-  
-  # BUILD RETURN LIST
-  #returnlist <- list("r.SDE"=r.SDE, "sdeatt"=result.sde, "sdeloc"=sdeloc)
-  returnlist <- list("TYPE"="SDE", "DATE"=date(), "LOCATIONS"=sdeloc, "FORPLOTTING"=r.SDE, "ATTRIBUTES"=result.sde)
+  # RETURN LIST WITH SIX ELEMENTS:
+  # ELEMENT 1: A TYPE INDICATOR (BOX, SDD, OR SDE)
+  # ELEMENT 2: DATE AND TIME THAT FUNCTION WAS RUN
+  # ELEMENT 3: UNIQUE ID FOR DATASET (PASSED AS ARGUMENT TO THIS FUNCTION)
+  # ELEMENT 4: boxloc IS A DATAFRAME REQUIRED FOR THE CONVERT.TO.SHAPEFILE FUNCTION
+  # ELEMENT 5: r.BOX IS A LIST OBJECT REQUIRED FOR PLOTTING
+  # ELEMENT 6: boxatt IS THE SD BOX ATTRIBUTES IN A DATA FRAME
+  returnlist <- list("TYPE"="SDE", "DATE"=date(), "ID"=id, "LOCATIONS"=sdeloc, "FORPLOTTING"=r.SDE, "ATTRIBUTES"=result.sde)
   return(returnlist)
   
 } # END FUNCTION: calc_sde
