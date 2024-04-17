@@ -1,6 +1,6 @@
-ff8809075f6e52383e093db331cbbeed *DESCRIPTION
+eab93761472a1aa7463f42429b372dc7 *DESCRIPTION
 42befc833aaa0428ed1c7d94bd8dc26b *NAMESPACE
-9762eb04efbbf9f2c59d291bd69d9e47 *NEWS.md
+e9844f5f517e52cbe28d370fbf57bfbd *NEWS.md
 4db1cacc403b4fb827f7619569f6e8c9 *R/acos_d.R
 f1c4cda682ad85958be504722ec1af5b *R/as_radians.R
 41bbf4d54459370d16ceca40bb1e5d0f *R/asin_d.R
@@ -16,7 +16,7 @@ be4ed7bfaa45636dacf9b5c4ef0f51bd *R/calc_sdd.R
 394f1f8fee5d5cc7ade0b0dcd30e72cc *R/cos_d.R
 dc0eb80918e68831485b5d253615806e *R/distances.R
 443f89d6591d64f496121240c6fb9292 *R/plot_box.R
-2cd304a453bad0281a5b7b9ad9a24be3 *R/plot_centres.R
+6eeea5bdb9863707f6a6596f43d649cc *R/plot_centres.R
 c90d84cfee47e07bd956cedb1fefd4e6 *R/plot_sdd.R
 74a1603512a8345dd839d9a1d9ad2619 *R/plot_sde.R
 8680e693f380230814cc550c759615ff *R/sin_d.R

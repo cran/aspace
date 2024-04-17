@@ -6,7 +6,7 @@ function(datin=NULL, plotnew=FALSE, plotSDE=FALSE, xaxis="Easting (m)", yaxis="N
   #  TITLE:     CENTRES PLOT FUNCTION
   #  FUNCTION:  plot_centres()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO K. REMMEL
-  #  DATE:      30 AUGUST 2023
+  #  DATE:      17 APRIL 2024
   #  NOTES:     THE datin ARGUMENT IS LIST OF OUTPUT OBJECTS FROM calc_ FUNCTIONS
   #             THE r.SDD/r.SDE/r.BOX OBJECT IS REQUIRED (GENERATED FROM THE
   #             CALC_SDD/CALC_SDE/CALC_BOX FUNCTION) TO PLOT. 
@@ -52,7 +52,7 @@ function(datin=NULL, plotnew=FALSE, plotSDE=FALSE, xaxis="Easting (m)", yaxis="N
     # CONVERT THE INPUT LIST OBJECT ELEMENTS INTO A SUMMARY TABLE TO GUIDE PROCESSING
     # BEGIN BY READING THE $TYPE ELEMENTS IN EACH LIST OBJECT INTO A VECTOR
     out <- NULL
-    for(listitem in 1:5) {
+    for(listitem in 1:nobj) {
       out <- c(out, datin[[listitem]]$TYPE)
     } # END FOR: listitem
     # CONVERT TO DATA FRAME AND ADD COLUMN NAMES

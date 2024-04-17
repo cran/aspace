@@ -1,3 +1,7 @@
+# apsace 4.1.1
+* Bugfixes
+    * Fixed a minor loop indexing error that threw an error if all centre types were not selected.
+    
 # apsace 4.1.0
 * Improvements
     * Inclusion of repaired and renamed function calc_cmd() that was previously CMD(). The change was to bring consistency across function naming.

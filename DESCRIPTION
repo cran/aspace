@@ -1,8 +1,8 @@
 Package: aspace
 Type: Package
 Title: Functions for Estimating Centrographic Statistics
-Version: 4.1.0
-Date: 2023-09-05
+Version: 4.1.1
+Date: 2024-04-17
 Authors@R: c(
   person("Tarmo K.", "Remmel", email = "remmelt@yorku.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6251-876X")),
   person("Randy", "Bui", role = "aut"),
@@ -23,9 +23,9 @@ Description: A collection of functions for computing centrographic
 License: GPL-3
 Depends: R (>= 2.3.0), splancs, Hmisc
 LazyData: true
-Packaged: 2023-09-05 15:55:53 UTC; tarmo
+Packaged: 2024-04-17 16:15:57 UTC; tarmo
 Repository: CRAN
-Date/Publication: 2023-09-05 16:20:02 UTC
+Date/Publication: 2024-04-17 16:30:02 UTC
 NeedsCompilation: no
 Author: Tarmo K. Remmel [aut, cre] (<https://orcid.org/0000-0001-6251-876X>),
   Randy Bui [aut],
