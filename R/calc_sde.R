@@ -6,7 +6,7 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
   #  TITLE:     STANDARD DEVIATION ELLIPSE (SDE) CALCULATOR
   #  FUNCTION:  calc_sde()
   #  AUTHOR:    RANDY BUI, RON BULIUNG, TARMO REMMEL
-  #  DATE:      25 AUGUST 2023
+  #  DATE:      17 APRIL 2024
   #  CALLS:     atan_d(), sin_d(), cos_d(), atan_d()
   #  NOTES:     NOTE THAT R TRIGONOMETRIC FUNCTIONS ARE IN RADIANS NOT DEGREES.
   #             WMC:  WEIGHTED MEAN CENTRE
@@ -132,14 +132,14 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
     bottom <- (2 * sum(points[,9]))
     tantheta <- (top1 + top2 ) / bottom
   } # END ELSE
-  
+
   # IF tantheta IS NEGATIVE, ADD 180 TO INVERSE TANGENT OF TANTHETA IN DEGREES
   # TO OBTAIN THE PROPER CLOCKWISE ROTATION ANGLE FROM THE TRANSPOSED AXES
   if(tantheta < 0) {
-    theta <- 180 + (atan_d(tantheta)) 
+    theta <- 180 + (atan_d(tantheta))
   } # END IF
   else {
-    theta <- atan_d(tantheta) 
+    theta <- atan_d(tantheta)
   } # END ELSE
     
   # COMPUTE OTHER TRIGONOMETRIC VALUES
@@ -152,7 +152,6 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
   # COMPUTE THE STANDARD DEVIATIONS FOR THE TWO NEW AXES OF THE ELLIPSE
   # NOTE THAT EQUATIONS ARE FROM CRIMESTAT (CHAPTER 4) RATHER THAN EBDON (1985)
   # TO ENSURE THE PROPER SIZE FOR THE ELLIPSE
-
   if(weighted) {
     # PERFORM THE WEIGHTED STANDARD DEVIATIONAL ELLIPSE COMPUTATION (WEIGHTED SDE)
     sigmax <- sqrt(2) * sqrt( ( (sum(weights*points[,7]))*(cos2theta) - 2*(sum(weights*points[,9]))*(sinthetacostheta) + (sum(weights*points[,8]))*(sin2theta) ) / ((sum(weights)) - 2) )
@@ -183,8 +182,7 @@ function(id=1, centre.xy=NULL, calccentre=TRUE, weighted=FALSE, weights=NULL, po
      
   # STORE THE ECCENTRICITY OF THE SDE
   eccentricity <- sqrt(1 - ((min(sigmax,sigmay)^2)/(max(sigmax,sigmay)^2)))
-  
-  # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDE ELLIPSE (BASED ON ELLIPSEPOINTS FUNCTION FROM SFSMISC LIBRARY) 
+  # COMPUTE AND STORE COORDINATES FOR PLOTTING THE SDE ELLIPSE (BASED ON ELLIPSEPOINTS FUNCTION FROM SFSMISC LIBRARY)
   B <- min(sigmax, sigmay)
   A <- max(sigmax, sigmay)
   d2 <- (A - B) * (A + B)

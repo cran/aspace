@@ -72,7 +72,7 @@ function(datin=NULL, plotnew=FALSE, plotSDE=FALSE, xaxis="Easting (m)", yaxis="N
         min.x <- min(robject$points1[,1], robject$points2[,1])
         max.x <- max(robject$points1[,1], robject$points2[,1])
         min.y <- min(robject$points1[,2], robject$points2[,2])
-        max.y <- min(robject$points1[,2], robject$points2[,2])
+        max.y <- max(robject$points1[,2], robject$points2[,2])
       } # END IF
       else {
         # SET EXTENTS TO THE RANGE OF THE SINGLE IMPUT SET OF POINTS
@@ -80,7 +80,7 @@ function(datin=NULL, plotnew=FALSE, plotSDE=FALSE, xaxis="Easting (m)", yaxis="N
         min.x <- min(robject$points[,1])
         max.x <- max(robject$points[,1])
         min.y <- min(robject$points[,2])
-        max.y <- min(robject$points[,2])
+        max.y <- max(robject$points[,2])
       } # END ELSE
       
       # PRODUCE BASE PLOT

@@ -1,3 +1,8 @@
+# apsace 4.1.2
+* Bugfixes
+    * Found and fixed a few more little plotting bugs (thanks to John H. Lowry).
+    * Made a few things more efficient.
+
 # apsace 4.1.1
 * Bugfixes
     * Fixed a minor loop indexing error that threw an error if all centre types were not selected.
